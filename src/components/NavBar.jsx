@@ -52,11 +52,11 @@ export default function NavBar({ currentView, setView }) {
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{
-              fontFamily: 'DM Mono, monospace',
-              fontSize: '10px', color: 'var(--text3)'
-            }}>
-              {new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'short' })}
-            </span>
+			  fontFamily: 'DM Mono, monospace',
+			  fontSize: '11px', color: 'var(--text2)'
+			}}>
+			  {profile?.username || user?.email?.split('@')[0]}
+			</span>
             <button
               onClick={() => setShowProfile(true)}
               title="Mi perfil"
