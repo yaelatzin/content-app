@@ -72,6 +72,17 @@ export default function ProjectModal({ project, workstreams, onSave, onClose }) 
               ))}
             </select>
           </div>
+		  
+		  <div className="form-group">
+		  <label className="form-label">Guion del video</label>
+		  <textarea
+			className="textarea input"
+			value={form.script || ''}
+			onChange={e => set('script', e.target.value)}
+			placeholder="Escribe aquí el guion, ideas, estructura del video..."
+			style={{ minHeight: '140px' }}
+		  />
+		</div>
 
           <div className="form-row">
             <div className="form-group">
