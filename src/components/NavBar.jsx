@@ -13,7 +13,7 @@ const VIEWS = [
 ]
 
 export default function NavBar({ currentView, setView }) {
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
   const { toast, ToastContainer } = useToast()
   const [showProfile, setShowProfile] = useState(false)
   const [showPrivacy, setShowPrivacy] = useState(false)
@@ -78,6 +78,26 @@ export default function NavBar({ currentView, setView }) {
                 : initials
               }
             </button>
+			<button
+			  onClick={signOut}
+			  title="Cerrar sesión"
+			  style={{
+				background: 'none',
+				border: '1px solid var(--border2)',
+				borderRadius: '8px',
+				color: 'var(--text3)',
+				fontFamily: 'DM Mono, monospace',
+				fontSize: '10px',
+				letterSpacing: '0.05em',
+				padding: '5px 10px',
+				cursor: 'pointer',
+				transition: 'color .15s, border-color .15s'
+			  }}
+			  onMouseEnter={e => { e.target.style.color = 'var(--red)'; e.target.style.borderColor = 'var(--red)' }}
+			  onMouseLeave={e => { e.target.style.color = 'var(--text3)'; e.target.style.borderColor = 'var(--border2)' }}
+			>
+			  salir
+			</button>
           </div>
         </div>
 
