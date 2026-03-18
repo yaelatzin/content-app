@@ -209,20 +209,20 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
 
       {/* Detalle */}
       {detail && (
-        <ProjectDetail
-          project={detail}
-          workstreams={workstreams}
-          onClose={() => setDetail(null)}
-          onEdit={() => { setModal(detail); setDetail(null) }}
-          onDelete={() => { setDetail(null); onRefresh() }}
-          onStatusChange={async (id, status) => {
-            await quickStatus(id, status)
-            const updated = projects.find(p => p.id === id)
-            if (updated) setDetail({ ...updated, status })
-          }}
-          toast={toast}
-        />
-      )}
+		  <ProjectDetail
+			project={detail}
+			workstreams={workstreams}
+			onClose={() => setDetail(null)}
+			onEdit={() => { setModal(detail); setDetail(null); }}
+			onDelete={() => { setDetail(null); onRefresh(); }}
+			onStatusChange={(id, status) => {
+			  quickStatus(id, status);
+			  const updated = projects.find(p => p.id === id);
+			  if (updated) setDetail(Object.assign({}, updated, { status }));
+			}}
+			toast={toast}
+		  />
+		)}
     </div>
   )
 }
