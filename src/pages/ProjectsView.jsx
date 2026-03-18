@@ -38,15 +38,16 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
 
   async function handleSave(form) {
     const payload = {
-      title: form.title,
-      description: form.description || null,
-      workstream_id: form.workstream_id || null,
-      started: form.started || null,
-      due: form.due || null,
-      completed: form.completed || null,
-      status: form.status || 'Not Started',
-      user_id: user.id,
-    }
+	  title: form.title,
+	  description: form.description || null,
+	  workstream_id: form.workstream_id || null,
+	  started: form.started || null,
+	  due: form.due || null,
+	  completed: form.completed || null,
+	  status: form.status || 'Not Started',
+	  script: form.script || null,
+	  user_id: user.id,
+	}
     if (form.id) {
       const { error } = await supabase.from('projects').update(payload).eq('id', form.id)
       if (error) throw error
