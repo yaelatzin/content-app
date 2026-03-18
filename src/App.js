@@ -13,7 +13,7 @@ import './index.css'
 function AppContent() {
   const { user, loading: authLoading } = useAuth()
   const { toast, ToastContainer } = useToast()
-  const [view, setView] = useState('dashboard')
+  const [view, setView] = useState('projects')
   const [projects, setProjects]       = useState([])
   const [tasks, setTasks]             = useState([])
   const [workstreams, setWorkstreams] = useState([])
