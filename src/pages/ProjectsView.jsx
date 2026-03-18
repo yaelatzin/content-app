@@ -145,6 +145,21 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
                         {p.description}
                       </p>
                     )}
+					
+					{p.script && (
+				  <div style={{ marginBottom: '12px' }}>
+					<div style={{ fontSize: '11px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>
+					  Guion
+					</div>
+					<div style={{
+					  fontSize: '13px', color: 'var(--text2)', lineHeight: 1.7,
+					  background: 'var(--surface2)', borderRadius: '8px',
+					  padding: '12px 14px', whiteSpace: 'pre-wrap'
+					}}>
+					  {p.script}
+					</div>
+				  </div>
+				)}
 
                     {/* Quick status */}
                     <div style={{ display: 'flex', gap: '6px', marginBottom: '10px', flexWrap: 'wrap' }}>
