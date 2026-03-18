@@ -1,3 +1,5 @@
+import PrivacyView from '../pages/PrivacyView'
+import SettingsView from '../pages/SettingsView'
 import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import ProfileView from '../pages/ProfileView'
@@ -14,6 +16,8 @@ export default function NavBar({ currentView, setView }) {
   const { user } = useAuth()
   const { toast, ToastContainer } = useToast()
   const [showProfile, setShowProfile] = useState(false)
+  const [showPrivacy, setShowPrivacy] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   const [profile, setProfile] = useState(null)
 
   // Cargar foto/nombre del perfil al montar
@@ -103,6 +107,40 @@ export default function NavBar({ currentView, setView }) {
         />
       )}
       <ToastContainer />
+	  {/* Menú lateral izquierdo */}
+<div style={{
+  position: 'fixed', left: 0, bottom: 0,
+  display: 'flex', flexDirection: 'column', gap: '2px',
+  padding: '0 0 24px 12px', zIndex: 90
+}}>
+  <button onClick={() => setShowSettings(true)} style={{
+    background: 'none', border: 'none',
+    color: 'var(--text3)', cursor: 'pointer',
+    fontFamily: 'DM Mono, monospace', fontSize: '10px',
+    letterSpacing: '0.05em', textAlign: 'left', padding: '4px 6px',
+    borderRadius: '6px', transition: 'color .15s'
+  }}
+    onMouseEnter={e => e.target.style.color = 'var(--accent)'}
+    onMouseLeave={e => e.target.style.color = 'var(--text3)'}
+  >
+    ⚙ Idioma
+  </button>
+  <button onClick={() => setShowPrivacy(true)} style={{
+    background: 'none', border: 'none',
+    color: 'var(--text3)', cursor: 'pointer',
+    fontFamily: 'DM Mono, monospace', fontSize: '10px',
+    letterSpacing: '0.05em', textAlign: 'left', padding: '4px 6px',
+    borderRadius: '6px', transition: 'color .15s'
+  }}
+    onMouseEnter={e => e.target.style.color = 'var(--accent)'}
+    onMouseLeave={e => e.target.style.color = 'var(--text3)'}
+  >
+    ⚖ Privacidad
+  </button>
+</div>
+
+{showPrivacy  && <PrivacyView  onClose={() => setShowPrivacy(false)} />}
+{showSettings && <SettingsView onClose={() => setShowSettings(false)} />}
     </>
   )
 }
