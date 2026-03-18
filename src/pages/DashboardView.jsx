@@ -54,7 +54,7 @@ export default function DashboardView({ projects, setView }) {
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1 style={{ fontSize: '20px', fontWeight: 800 }}>Resumen</h1>
+        <h1 className="anton" style={{ fontSize: '22px' }}>Resumen</h1>
         <span className="badge">
           {new Date().toLocaleDateString('es-MX', { month: 'long', year: 'numeric' })}
         </span>

@@ -74,7 +74,7 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <h1 style={{ fontSize: '20px', fontWeight: 800 }}>Proyectos</h1>
+        <h1 className="anton" style={{ fontSize: '22px' }}>Resumen</h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span className="badge">{filtered.length}</span>
           <button className="btn btn-primary btn-sm" onClick={() => setModal('new')}>
@@ -112,7 +112,7 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
 
                 {/* Top row */}
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                  <div style={{ flex: 1, fontSize: '14px', fontWeight: 600, lineHeight: 1.4 }}>{p.title}</div>
+                  <div className="anton" style={{ flex: 1, fontSize: '15px', lineHeight: 1.3 }}>{p.title}</div>
                   <span className={`pill ${STATUS_CLASS[p.status] || 'pill-empty'}`}>
                     {p.status || 'Sin estado'}
                   </span>

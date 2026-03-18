@@ -44,7 +44,7 @@ export default function TasksView({ tasks, projects, onRefresh, toast }) {
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <h1 style={{ fontSize: '20px', fontWeight: 800 }}>Tareas</h1>
+        <h1 className="anton" style={{ fontSize: '22px' }}>Resumen</h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span className="badge">{tasks.length}</span>
           <button className="btn btn-primary btn-sm" onClick={() => setShowForm(!showForm)}>

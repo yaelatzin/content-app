@@ -41,7 +41,7 @@ export default function WorkstreamsView({ workstreams, projects, onRefresh, toas
     <div style={{ padding: '20px', maxWidth: '480px', margin: '0 auto' }}>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <h1 style={{ fontSize: '20px', fontWeight: 800 }}>Workstreams</h1>
+        <h1 className="anton" style={{ fontSize: '22px' }}>Resumen</h1>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <span className="badge">{workstreams.length}</span>
           <button className="btn btn-primary btn-sm" onClick={() => { setShowForm(!showForm); setEditing(null); setForm({ name: '', description: '' }) }}>

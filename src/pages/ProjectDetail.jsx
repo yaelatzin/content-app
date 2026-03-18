@@ -58,7 +58,7 @@ export default function ProjectDetail({ project, workstreams, onClose, onEdit, o
       <div style={{ padding: '24px 20px', maxWidth: '480px', margin: '0 auto', width: '100%', flex: 1 }}>
 
         {/* Title */}
-        <h1 style={{ fontSize: '22px', fontWeight: 800, lineHeight: 1.3, marginBottom: '12px' }}>
+        <h1 className="anton" style={{ fontSize: '26px', lineHeight: 1.2, marginBottom: '12px' }}>
           {project.title}
         </h1>
 
