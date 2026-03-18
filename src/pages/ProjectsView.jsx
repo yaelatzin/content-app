@@ -1,15 +1,15 @@
-import ProjectDetail from './ProjectDetail'
 import { useState, useMemo } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import ProjectModal from '../components/ProjectModal'
+import ProjectDetail from './ProjectDetail'
 
 const FILTERS = [
-  { key: 'all',          label: 'Todos' },
-  { key: 'Not Started',  label: 'Pendientes' },
-  { key: 'In Progress',  label: 'En progreso' },
-  { key: 'Completed',    label: 'Completados' },
-  { key: 'Cancelled',    label: 'Cancelados' },
+  { key: 'all',         label: 'Todos' },
+  { key: 'Not Started', label: 'Pendientes' },
+  { key: 'In Progress', label: 'En progreso' },
+  { key: 'Completed',   label: 'Completados' },
+  { key: 'Cancelled',   label: 'Cancelados' },
 ]
 
 const STATUS_CLASS = {
@@ -26,11 +26,11 @@ function fmtDate(d) {
 }
 
 export default function ProjectsView({ projects, workstreams, onRefresh, toast }) {
-  const [detail, setDetail] = useState(null)
   const { user } = useAuth()
   const [filter, setFilter] = useState('all')
   const [expanded, setExpanded] = useState(null)
-  const [modal, setModal] = useState(null) // null | 'new' | project obj
+  const [modal, setModal] = useState(null)
+  const [detail, setDetail] = useState(null)
   const [deleting, setDeleting] = useState(null)
 
   const filtered = useMemo(() =>
@@ -40,16 +40,16 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
 
   async function handleSave(form) {
     const payload = {
-	  title: form.title,
-	  description: form.description || null,
-	  workstream_id: form.workstream_id || null,
-	  started: form.started || null,
-	  due: form.due || null,
-	  completed: form.completed || null,
-	  status: form.status || 'Not Started',
-	  script: form.script || null,
-	  user_id: user.id,
-	}
+      title: form.title,
+      description: form.description || null,
+      workstream_id: form.workstream_id || null,
+      started: form.started || null,
+      due: form.due || null,
+      completed: form.completed || null,
+      status: form.status || 'Not Started',
+      script: form.script || null,
+      user_id: user.id,
+    }
     if (form.id) {
       const { error } = await supabase.from('projects').update(payload).eq('id', form.id)
       if (error) throw error
@@ -60,15 +60,6 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
       toast('Proyecto creado', 'success')
     }
     onRefresh()
-  }
-
-  async function handleDelete(id) {
-    setDeleting(id)
-    const { error } = await supabase.from('projects').delete().eq('id', id)
-    if (!error) { toast('Proyecto eliminado'); onRefresh() }
-    else toast(error.message, 'error')
-    setDeleting(null)
-    setExpanded(null)
   }
 
   async function quickStatus(id, status) {
@@ -129,7 +120,11 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
 
                 {/* Meta */}
                 <div style={{ display: 'flex', gap: '12px', marginTop: '10px', flexWrap: 'wrap' }}>
-                  {ws && <span style={{ fontSize: '11px', color: 'var(--accent)', fontFamily: 'DM Mono, monospace' }}>{ws.name}</span>}
+                  {ws && (
+                    <span style={{ fontSize: '11px', color: 'var(--accent)', fontFamily: 'DM Mono, monospace' }}>
+                      {ws.name}
+                    </span>
+                  )}
                   <span style={{ fontSize: '11px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace' }}>
                     Vence {fmtDate(p.due)}
                   </span>
@@ -142,30 +137,10 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
 
                 {/* Expanded */}
                 {isOpen && (
-				  <div style={{ borderTop: '1px solid var(--border)', marginTop: '12px', paddingTop: '12px' }}
-					onClick={e => e.stopPropagation()}>
-
-					{/* Quick status */}
-					<div style={{ display: 'flex', gap: '6px', marginBottom: '10px', flexWrap: 'wrap' }}>
-					  {['Not Started', 'In Progress', 'Completed'].map(s => (
-						<button key={s} onClick={() => quickStatus(p.id, s)} style={{
-						  padding: '5px 10px', borderRadius: '6px', fontSize: '11px',
-						  fontFamily: 'Syne, sans-serif', cursor: 'pointer',
-						  border: p.status === s ? '1px solid var(--accent)' : '1px solid var(--border2)',
-						  background: p.status === s ? 'var(--accent-bg)' : 'transparent',
-						  color: p.status === s ? 'var(--accent)' : 'var(--text2)',
-						}}>{s}</button>
-					  ))}
-					</div>
-
-					{/* Botón abrir */}
-					<button className="btn btn-primary btn-full"
-					  onClick={() => { setDetail(p); setExpanded(null) }}>
-					  Abrir →
-					</button>
-				  </div>
-				)}
-
+                  <div
+                    style={{ borderTop: '1px solid var(--border)', marginTop: '12px', paddingTop: '12px' }}
+                    onClick={e => e.stopPropagation()}
+                  >
                     {/* Quick status */}
                     <div style={{ display: 'flex', gap: '6px', marginBottom: '10px', flexWrap: 'wrap' }}>
                       {['Not Started', 'In Progress', 'Completed'].map(s => (
@@ -179,17 +154,13 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
                       ))}
                     </div>
 
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <button className="btn btn-ghost btn-sm btn-full"
-                        onClick={() => { setModal(p); setExpanded(null) }}>
-                        Editar
-                      </button>
-                      <button className="btn btn-danger btn-sm btn-full"
-                        disabled={deleting === p.id}
-                        onClick={() => handleDelete(p.id)}>
-                        {deleting === p.id ? '...' : 'Eliminar'}
-                      </button>
-                    </div>
+                    {/* Botón abrir */}
+                    <button
+                      className="btn btn-primary btn-full"
+                      onClick={() => { setDetail(p); setExpanded(null) }}
+                    >
+                      Abrir →
+                    </button>
                   </div>
                 )}
               </div>
@@ -209,20 +180,20 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
 
       {/* Detalle */}
       {detail && (
-		  <ProjectDetail
-			project={detail}
-			workstreams={workstreams}
-			onClose={() => setDetail(null)}
-			onEdit={() => { setModal(detail); setDetail(null); }}
-			onDelete={() => { setDetail(null); onRefresh(); }}
-			onStatusChange={(id, status) => {
-			  quickStatus(id, status);
-			  const updated = projects.find(p => p.id === id);
-			  if (updated) setDetail(Object.assign({}, updated, { status }));
-			}}
-			toast={toast}
-		  />
-		)}
+        <ProjectDetail
+          project={detail}
+          workstreams={workstreams}
+          onClose={() => setDetail(null)}
+          onEdit={() => { setModal(detail); setDetail(null) }}
+          onDelete={() => { setDetail(null); onRefresh() }}
+          onStatusChange={(id, status) => {
+            quickStatus(id, status)
+            const updated = projects.find(p => p.id === id)
+            if (updated) setDetail(Object.assign({}, updated, { status }))
+          }}
+          toast={toast}
+        />
+      )}
     </div>
   )
 }
