@@ -1,0 +1,17 @@
+{
+  "short_name": "Content App",
+  "name": "Content App — YG",
+  "description": "Gestión de proyectos de contenido",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0d0d0f",
+  "background_color": "#0d0d0f",
+  "orientation": "portrait"
+}
