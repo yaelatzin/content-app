@@ -1,3 +1,4 @@
+import ProjectDetail from './ProjectDetail'
 import { useState, useMemo } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
@@ -25,6 +26,7 @@ function fmtDate(d) {
 }
 
 export default function ProjectsView({ projects, workstreams, onRefresh, toast }) {
+  const [detail, setDetail] = useState(null)
   const { user } = useAuth()
   const [filter, setFilter] = useState('all')
   const [expanded, setExpanded] = useState(null)
@@ -140,25 +142,27 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
 
                 {/* Expanded */}
                 {isOpen && (
-                  <div style={{ borderTop: '1px solid var(--border)', marginTop: '12px', paddingTop: '12px' }} onClick={e => e.stopPropagation()}>
-                    {p.description && (
-                      <p style={{ fontSize: '13px', color: 'var(--text2)', lineHeight: 1.6, marginBottom: '12px' }}>
-                        {p.description}
-                      </p>
-                    )}
-					
-					{p.script && (
-				  <div style={{ marginBottom: '12px' }}>
-					<div style={{ fontSize: '11px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>
-					  Guion
+				  <div style={{ borderTop: '1px solid var(--border)', marginTop: '12px', paddingTop: '12px' }}
+					onClick={e => e.stopPropagation()}>
+
+					{/* Quick status */}
+					<div style={{ display: 'flex', gap: '6px', marginBottom: '10px', flexWrap: 'wrap' }}>
+					  {['Not Started', 'In Progress', 'Completed'].map(s => (
+						<button key={s} onClick={() => quickStatus(p.id, s)} style={{
+						  padding: '5px 10px', borderRadius: '6px', fontSize: '11px',
+						  fontFamily: 'Syne, sans-serif', cursor: 'pointer',
+						  border: p.status === s ? '1px solid var(--accent)' : '1px solid var(--border2)',
+						  background: p.status === s ? 'var(--accent-bg)' : 'transparent',
+						  color: p.status === s ? 'var(--accent)' : 'var(--text2)',
+						}}>{s}</button>
+					  ))}
 					</div>
-					<div style={{
-					  fontSize: '13px', color: 'var(--text2)', lineHeight: 1.7,
-					  background: 'var(--surface2)', borderRadius: '8px',
-					  padding: '12px 14px', whiteSpace: 'pre-wrap'
-					}}>
-					  {p.script}
-					</div>
+
+					{/* Botón abrir */}
+					<button className="btn btn-primary btn-full"
+					  onClick={() => { setDetail(p); setExpanded(null) }}>
+					  Abrir →
+					</button>
 				  </div>
 				)}
 
@@ -200,6 +204,23 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
           workstreams={workstreams}
           onSave={handleSave}
           onClose={() => setModal(null)}
+        />
+      )}
+
+      {/* Detalle */}
+      {detail && (
+        <ProjectDetail
+          project={detail}
+          workstreams={workstreams}
+          onClose={() => setDetail(null)}
+          onEdit={() => { setModal(detail); setDetail(null) }}
+          onDelete={() => { setDetail(null); onRefresh() }}
+          onStatusChange={async (id, status) => {
+            await quickStatus(id, status)
+            const updated = projects.find(p => p.id === id)
+            if (updated) setDetail({ ...updated, status })
+          }}
+          toast={toast}
         />
       )}
     </div>
