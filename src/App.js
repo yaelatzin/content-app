@@ -19,6 +19,11 @@ function AppContent() {
   const [tasks, setTasks]             = useState([])
   const [workstreams, setWorkstreams] = useState([])
   const [dataLoading, setDataLoading] = useState(false)
+  useEffect(() => {
+  if (window.location.hash && window.location.hash.includes('access_token')) {
+    supabase.auth.getSession()
+  }
+}, [])
 
   const fetchAll = useCallback(async () => {
     if (!user) return
