@@ -1,25 +1,37 @@
 import { useState, useEffect } from 'react'
 
 const STATUS_OPTIONS = ['Not Started', 'In Progress', 'Completed', 'Cancelled']
+const DRAFT_KEY = 'project_modal_draft'
 
 export default function ProjectModal({ project, workstreams, onSave, onClose }) {
   const isEdit = !!project?.id
-  const [form, setForm] = useState({
-    title: '',
-    description: '',
-    workstream_id: '',
-    started: new Date().toISOString().split('T')[0],
-    due: '',
-    status: 'Not Started',
-    ...project,
-    completed: project?.completed || '',
+
+  const [form, setForm] = useState(() => {
+    if (isEdit) return {
+      title: '', description: '', workstream_id: '',
+      started: new Date().toISOString().split('T')[0],
+      due: '', status: 'Not Started', completed: '', script: '',
+      ...project, completed: project?.completed || '', script: project?.script || ''
+    }
+    const saved = localStorage.getItem(DRAFT_KEY)
+    if (saved) {
+      try { return JSON.parse(saved) } catch {}
+    }
+    return {
+      title: '', description: '', workstream_id: '',
+      started: new Date().toISOString().split('T')[0],
+      due: '', status: 'Not Started', completed: '', script: ''
+    }
   })
+
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (project) setForm({ ...project, completed: project.completed || '' })
-  }, [project])
+    if (!isEdit) {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(form))
+    }
+  }, [form, isEdit])
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
@@ -29,6 +41,7 @@ export default function ProjectModal({ project, workstreams, onSave, onClose }) 
     setLoading(true); setError('')
     try {
       await onSave(form)
+      localStorage.removeItem(DRAFT_KEY)
       onClose()
     } catch (err) {
       setError(err.message)
@@ -37,12 +50,17 @@ export default function ProjectModal({ project, workstreams, onSave, onClose }) 
     }
   }
 
+  function handleClose() {
+    localStorage.removeItem(DRAFT_KEY)
+    onClose()
+  }
+
   return (
-    <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+    <div className="modal-overlay" onClick={e => e.target === e.currentTarget && handleClose()}>
       <div className="modal">
         <div className="modal-title">
           {isEdit ? 'Editar proyecto' : 'Nuevo proyecto'}
-          <button className="modal-close" onClick={onClose}>×</button>
+          <button className="modal-close" onClick={handleClose}>×</button>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -72,17 +90,6 @@ export default function ProjectModal({ project, workstreams, onSave, onClose }) 
               ))}
             </select>
           </div>
-		  
-		  <div className="form-group">
-		  <label className="form-label">Guion del video</label>
-		  <textarea
-			className="textarea input"
-			value={form.script || ''}
-			onChange={e => set('script', e.target.value)}
-			placeholder="Escribe aquí el guion, ideas, estructura del video..."
-			style={{ minHeight: '140px' }}
-		  />
-		</div>
 
           <div className="form-row">
             <div className="form-group">
@@ -112,8 +119,19 @@ export default function ProjectModal({ project, workstreams, onSave, onClose }) 
             </div>
           </div>
 
+          <div className="form-group">
+            <label className="form-label">Guion del video</label>
+            <textarea
+              className="textarea input"
+              value={form.script || ''}
+              onChange={e => set('script', e.target.value)}
+              placeholder="Escribe aquí el guion, ideas, estructura del video..."
+              style={{ minHeight: '140px' }}
+            />
+          </div>
+
           <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
-            <button type="button" className="btn btn-ghost btn-full" onClick={onClose}>
+            <button type="button" className="btn btn-ghost btn-full" onClick={handleClose}>
               Cancelar
             </button>
             <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
