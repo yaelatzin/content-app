@@ -1,3 +1,4 @@
+import ResetPassword from './pages/ResetPassword'
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from './lib/supabase'
 import { AuthProvider, useAuth } from './hooks/useAuth'
@@ -20,6 +21,9 @@ function AppContent() {
   const [dataLoading, setDataLoading] = useState(false)
 
   const fetchAll = useCallback(async () => {
+	if (window.location.pathname === '/reset-password') {
+	  return <ResetPassword />
+	}
     if (!user) return
     setDataLoading(true)
     const [pRes, tRes, wRes] = await Promise.all([

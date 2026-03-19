@@ -1,3 +1,4 @@
+import { supabase } from '../lib/supabase'
 import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 
@@ -11,23 +12,29 @@ export default function LoginPage() {
   const [success, setSuccess] = useState('')
 
   async function handleSubmit(e) {
-    e.preventDefault()
-    setError(''); setSuccess(''); setLoading(true)
-    try {
-      if (mode === 'login') {
-        const { error } = await signIn(email, password)
-        if (error) throw error
-      } else {
-        const { error } = await signUp(email, password)
-        if (error) throw error
-        setSuccess('¡Cuenta creada! Revisa tu email para confirmar.')
-      }
-    } catch (err) {
-      setError(err.message || 'Ocurrió un error')
-    } finally {
-      setLoading(false)
+  e.preventDefault()
+  setError(''); setSuccess(''); setLoading(true)
+  try {
+    if (mode === 'forgot') {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`
+      })
+      if (error) throw error
+      setSuccess('Te enviamos un link para restablecer tu contraseña.')
+    } else if (mode === 'login') {
+      const { error } = await signIn(email, password)
+      if (error) throw error
+    } else {
+      const { error } = await signUp(email, password)
+      if (error) throw error
+      setSuccess('¡Cuenta creada! Revisa tu email para confirmar.')
     }
+  } catch (err) {
+    setError(err.message || 'Ocurrió un error')
+  } finally {
+    setLoading(false)
   }
+}
 
   return (
     <div style={{
@@ -46,8 +53,8 @@ export default function LoginPage() {
 		  </svg>
 		</div>
           <div style={{ fontSize: '13px', color: 'var(--text3)' }}>
-            {mode === 'login' ? 'Inicia sesión para continuar' : 'Crea tu cuenta'}
-          </div>
+			  {mode === 'login' ? 'Inicia sesión para continuar' : mode === 'register' ? 'Crea tu cuenta' : 'Restablece tu contraseña'}
+			</div>
         </div>
 
         {/* Card */}
@@ -88,6 +95,21 @@ export default function LoginPage() {
               />
             </div>
 
+{mode !== 'forgot' && (
+  <div className="form-group">
+    <label className="form-label">Contraseña</label>
+    <input
+      className="input"
+      type="password"
+      placeholder="••••••••"
+      value={password}
+      onChange={e => setPassword(e.target.value)}
+      required={mode !== 'forgot'}
+      minLength={6}
+    />
+  </div>
+)}
+
             <button
               type="submit"
               className="btn btn-primary btn-full"
@@ -102,17 +124,34 @@ export default function LoginPage() {
           </form>
         </div>
 
-        {/* Toggle */}
-        <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--text3)' }}>
-          {mode === 'login' ? '¿No tienes cuenta? ' : '¿Ya tienes cuenta? '}
-          <button
-            onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); setSuccess('') }}
-            style={{
-              background: 'none', border: 'none',
-              color: 'var(--accent)', cursor: 'pointer',
-              fontFamily: 'Montserrat, sans-serif', fontSize: '13px', fontWeight: 600
-            }}
-          >
+       <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--text3)' }}>
+		  {mode === 'login' ? '¿No tienes cuenta? ' : '¿Ya tienes cuenta? '}
+		  <button
+			onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); setSuccess('') }}
+			style={{
+			  background: 'none', border: 'none',
+			  color: 'var(--accent)', cursor: 'pointer',
+			  fontFamily: 'Montserrat, sans-serif', fontSize: '13px', fontWeight: 600
+			}}
+		  >
+			{mode === 'login' ? 'Regístrate' : 'Inicia sesión'}
+		  </button>
+		</div>
+
+		{mode === 'login' && (
+		  <div style={{ textAlign: 'center', marginTop: '12px' }}>
+			<button
+			  onClick={() => setMode('forgot')}
+			  style={{
+				background: 'none', border: 'none',
+				color: 'var(--text3)', cursor: 'pointer',
+				fontFamily: 'Montserrat, sans-serif', fontSize: '12px'
+			  }}
+			>
+      ¿Olvidaste tu contraseña?
+    </button>
+  </div>
+)}
             {mode === 'login' ? 'Regístrate' : 'Inicia sesión'}
           </button>
         </div>
