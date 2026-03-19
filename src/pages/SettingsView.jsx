@@ -1,11 +1,14 @@
+import { useState } from 'react'
+
 const LANGUAGES = [
   { code: 'es', label: 'Español', flag: '🇲🇽' },
   { code: 'en', label: 'English', flag: '🇺🇸' },
 ]
 
 export default function SettingsView({ onClose }) {
-  const saved = localStorage.getItem('app_language') || 'es'
-  const [selected, setSelected] = require('react').useState(saved)
+  const [selected, setSelected] = useState(
+    localStorage.getItem('app_language') || 'es'
+  )
 
   function handleSelect(code) {
     setSelected(code)
@@ -18,7 +21,6 @@ export default function SettingsView({ onClose }) {
       background: 'var(--bg)', overflowY: 'auto',
       animation: 'slideUp .2s ease'
     }}>
-      {/* Header */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 10,
         background: 'var(--bg)',
@@ -35,22 +37,22 @@ export default function SettingsView({ onClose }) {
       </div>
 
       <div style={{ padding: '28px 20px', maxWidth: '480px', margin: '0 auto' }}>
-
-        {/* Idioma */}
-        <div style={{ fontSize: '11px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>
+        <div style={{
+          fontSize: '11px', color: 'var(--text3)',
+          fontFamily: 'DM Mono, monospace',
+          textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px'
+        }}>
           Idioma de la app
         </div>
 
         {LANGUAGES.map(lang => (
-          <div key={lang.code}
-            onClick={() => handleSelect(lang.code)}
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '14px 16px', borderRadius: '12px', marginBottom: '8px',
-              background: 'var(--surface)',
-              border: selected === lang.code ? '1px solid var(--accent)' : '1px solid var(--border)',
-              cursor: 'pointer', transition: 'border-color .15s'
-            }}>
+          <div key={lang.code} onClick={() => handleSelect(lang.code)} style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '14px 16px', borderRadius: '12px', marginBottom: '8px',
+            background: 'var(--surface)',
+            border: selected === lang.code ? '1px solid var(--accent)' : '1px solid var(--border)',
+            cursor: 'pointer', transition: 'border-color .15s'
+          }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <span style={{ fontSize: '22px' }}>{lang.flag}</span>
               <span style={{ fontSize: '14px', fontWeight: 600 }}>{lang.label}</span>
