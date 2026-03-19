@@ -15,19 +15,20 @@ export default function LoginPage() {
     e.preventDefault()
     setError(''); setSuccess(''); setLoading(true)
     try {
-      if (mode === 'forgot') {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${window.location.origin}/reset-password`
+      if (mode === 'magic') {
+        const { error } = await supabase.auth.signInWithOtp({
+          email,
+          options: { emailRedirectTo: window.location.origin }
         })
         if (error) throw error
-        setSuccess('Te enviamos un link para restablecer tu contraseña.')
+        setSuccess('¡Link enviado! Revisa tu email y haz clic en el link para entrar.')
       } else if (mode === 'login') {
         const { error } = await signIn(email, password)
         if (error) throw error
-      } else {
+      } else if (mode === 'register') {
         const { error } = await signUp(email, password)
         if (error) throw error
-        setSuccess('¡Cuenta creada! Revisa tu email para confirmar.')
+        setSuccess('¡Cuenta creada! Ya puedes iniciar sesión.')
       }
     } catch (err) {
       setError(err.message || 'Ocurrió un error')
@@ -44,7 +45,6 @@ export default function LoginPage() {
     }}>
       <div style={{ width: '100%', maxWidth: '380px' }}>
 
-        {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <div style={{ marginBottom: '16px' }}>
             <svg height="64" viewBox="0 0 147.73 133.36" xmlns="http://www.w3.org/2000/svg">
@@ -53,11 +53,10 @@ export default function LoginPage() {
             </svg>
           </div>
           <div style={{ fontSize: '13px', color: 'var(--text3)' }}>
-            {mode === 'login' ? 'Inicia sesión para continuar' : mode === 'register' ? 'Crea tu cuenta' : 'Restablece tu contraseña'}
+            {mode === 'login' ? 'Inicia sesión' : mode === 'register' ? 'Crea tu cuenta' : 'Entrar sin contraseña'}
           </div>
         </div>
 
-        {/* Card */}
         <div className="card" style={{ padding: '28px' }}>
           <form onSubmit={handleSubmit}>
             {error && <div className="error-msg">{error}</div>}
@@ -72,93 +71,67 @@ export default function LoginPage() {
 
             <div className="form-group">
               <label className="form-label">Email</label>
-              <input
-                className="input"
-                type="email"
-                placeholder="tu@email.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-              />
+              <input className="input" type="email"
+                placeholder="tu@email.com" value={email}
+                onChange={e => setEmail(e.target.value)} required />
             </div>
 
-            {mode !== 'forgot' && (
+            {mode !== 'magic' && (
               <div className="form-group">
                 <label className="form-label">Contraseña</label>
-                <input
-                  className="input"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
+                <input className="input" type="password"
+                  placeholder="••••••••" value={password}
                   onChange={e => setPassword(e.target.value)}
-                  required
-                  minLength={6}
-                />
+                  required minLength={6} />
               </div>
             )}
 
-            <button
-              type="submit"
-              className="btn btn-primary btn-full"
-              disabled={loading}
-              style={{ marginTop: '8px' }}
-            >
+            <button type="submit" className="btn btn-primary btn-full"
+              disabled={loading} style={{ marginTop: '8px' }}>
               {loading
                 ? <span className="spinner" style={{ width: 16, height: 16 }} />
-                : mode === 'login' ? 'Entrar' : mode === 'register' ? 'Crear cuenta' : 'Enviar link'
+                : mode === 'login' ? 'Entrar'
+                : mode === 'register' ? 'Crear cuenta'
+                : 'Enviar link mágico'
               }
             </button>
           </form>
         </div>
 
-        {/* Toggle login/register */}
-        {mode !== 'forgot' && (
+        {mode !== 'magic' && (
           <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--text3)' }}>
             {mode === 'login' ? '¿No tienes cuenta? ' : '¿Ya tienes cuenta? '}
-            <button
-              onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); setSuccess('') }}
+            <button onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); setSuccess('') }}
               style={{
-                background: 'none', border: 'none',
-                color: 'var(--accent)', cursor: 'pointer',
-                fontFamily: 'Montserrat, sans-serif', fontSize: '13px', fontWeight: 600
-              }}
-            >
+                background: 'none', border: 'none', color: 'var(--accent)',
+                cursor: 'pointer', fontFamily: 'Montserrat, sans-serif',
+                fontSize: '13px', fontWeight: 600
+              }}>
               {mode === 'login' ? 'Regístrate' : 'Inicia sesión'}
             </button>
           </div>
         )}
 
-        {/* Olvidé contraseña */}
-        {mode === 'login' && (
-          <div style={{ textAlign: 'center', marginTop: '12px' }}>
-            <button
-              onClick={() => { setMode('forgot'); setError(''); setSuccess('') }}
+        <div style={{ textAlign: 'center', marginTop: '12px' }}>
+          {mode !== 'magic' ? (
+            <button onClick={() => { setMode('magic'); setError(''); setSuccess('') }}
               style={{
-                background: 'none', border: 'none',
-                color: 'var(--text3)', cursor: 'pointer',
-                fontFamily: 'Montserrat, sans-serif', fontSize: '12px'
-              }}
-            >
-              ¿Olvidaste tu contraseña?
+                background: 'none', border: 'none', color: 'var(--text3)',
+                cursor: 'pointer', fontFamily: 'Montserrat, sans-serif', fontSize: '12px'
+              }}>
+              ¿Olvidaste tu contraseña? Entra sin contraseña →
             </button>
-          </div>
-        )}
-
-        {/* Volver al login desde forgot */}
-        {mode === 'forgot' && (
-          <div style={{ textAlign: 'center', marginTop: '16px' }}>
-            <button
-              onClick={() => { setMode('login'); setError(''); setSuccess('') }}
+          ) : (
+            <button onClick={() => { setMode('login'); setError(''); setSuccess('') }}
               style={{
-                background: 'none', border: 'none',
-                color: 'var(--accent)', cursor: 'pointer',
-                fontFamily: 'Montserrat, sans-serif', fontSize: '13px', fontWeight: 600
-              }}
-            >
+                background: 'none', border: 'none', color: 'var(--accent)',
+                cursor: 'pointer', fontFamily: 'Montserrat, sans-serif',
+                fontSize: '13px', fontWeight: 600
+              }}>
               ← Volver al login
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   )
