@@ -216,3 +216,18 @@ html, body, #root {
   font-weight: 400;
   letter-spacing: -0.01em;
 }
+
+/* Light theme */
+body.light {
+  --bg:       #f5f5f0;
+  --surface:  #ffffff;
+  --surface2: #f0f0ea;
+  --surface3: #e8e8e0;
+  --border:   #ddddd5;
+  --border2:  #ccccC4;
+  --text:     #1a1a1a;
+  --text2:    #555550;
+  --text3:    #99998a;
+  --accent-bg:     rgba(244,186,21,0.12);
+  --accent-border: rgba(244,186,21,0.30);
+}
