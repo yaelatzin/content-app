@@ -127,72 +127,91 @@ export default function NavBar({ currentView, setView }) {
         </div>
       </div>
 
-      {/* Dropdown menu */}
-      {menuOpen && (
-        <>
-          <div
-            onClick={() => setMenuOpen(false)}
-            style={{ position: 'fixed', inset: 0, zIndex: 150 }}
-          />
-          <div style={{
-            position: 'fixed', top: '62px', left: '16px',
-            zIndex: 200, background: 'var(--surface)',
-            border: '1px solid var(--border2)',
-            borderRadius: '14px', padding: '8px',
-            minWidth: '200px',
-            animation: 'fadeIn .15s ease'
-          }}>
+      {/* Sidebar menu */}
+		<div style={{
+		  position: 'fixed', top: 0, left: menuOpen ? 0 : '-260px',
+		  width: '260px', height: '100vh',
+		  background: 'var(--surface)',
+		  borderRight: '1px solid var(--border2)',
+		  zIndex: 300, transition: 'left .25s ease',
+		  display: 'flex', flexDirection: 'column',
+		  padding: '0 0 40px'
+		}}>
+		  {/* Header sidebar */}
+		  <div style={{
+			display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+			padding: '16px 20px',
+			borderBottom: '1px solid var(--border)'
+		  }}>
+			<svg height="24" viewBox="0 0 147.73 133.36" xmlns="http://www.w3.org/2000/svg">
+			  <path fill="#f4ba15" d="M24.64,76.31L0,1.85h21.67l13.89,47.6h.37L49.83,1.85h19.82l-24.64,74.46v55.2h-20.38v-55.2Z"/>
+			  <path fill="#f4ba15" d="M94.76,124.94c-5.19-5.62-7.78-13.68-7.78-24.17V32.6c0-10.49,2.59-18.55,7.78-24.17,5.19-5.62,12.72-8.43,22.6-8.43s17.41,2.81,22.6,8.43c5.19,5.62,7.78,13.68,7.78,24.17v11.11h-19.26v-12.41c0-8.52-3.52-12.78-10.56-12.78s-10.56,4.26-10.56,12.78v70.94c0,8.4,3.52,12.59,10.56,12.59s10.56-4.2,10.56-12.59v-25.38h-10.19v-18.52h29.45v42.42c0,10.5-2.59,18.55-7.78,24.17-5.19,5.62-12.72,8.43-22.6,8.43s-17.41-2.81-22.6-8.43Z"/>
+			</svg>
+			<button onClick={() => setMenuOpen(false)} style={{
+			  background: 'none', border: 'none', color: 'var(--text2)',
+			  fontSize: '22px', cursor: 'pointer', lineHeight: 1
+			}}>×</button>
+		  </div>
 
-            {/* Tema */}
-            <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '10px 12px', borderRadius: '8px',
-            }}>
-              <span style={{ fontSize: '13px', color: 'var(--text)' }}>
-                {isDark ? '🌙 Modo oscuro' : '☀️ Modo claro'}
-              </span>
-              <button
-                onClick={() => setIsDark(!isDark)}
-                style={{
-                  width: '40px', height: '22px', borderRadius: '11px',
-                  background: isDark ? 'var(--accent)' : 'var(--border2)',
-                  border: 'none', cursor: 'pointer', position: 'relative',
-                  transition: 'background .2s', flexShrink: 0
-                }}
-              >
-                <div style={{
-                  position: 'absolute', top: '3px',
-                  left: isDark ? '20px' : '3px',
-                  width: '16px', height: '16px', borderRadius: '50%',
-                  background: '#fff', transition: 'left .2s'
-                }} />
-              </button>
-            </div>
+		  {/* Menu items */}
+		  <div style={{ flex: 1, padding: '12px 12px' }}>
 
-            <div style={{ height: '1px', background: 'var(--border)', margin: '4px 0' }} />
+			{/* Tema */}
+			<div style={{
+			  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+			  padding: '12px 10px', borderRadius: '10px',
+			  marginBottom: '4px'
+			}}>
+			  <span style={{ fontSize: '14px', color: 'var(--text)' }}>
+				{isDark ? '🌙 Modo oscuro' : '☀️ Modo claro'}
+			  </span>
+			  <button onClick={() => setIsDark(!isDark)} style={{
+				width: '40px', height: '22px', borderRadius: '11px',
+				background: isDark ? 'var(--accent)' : 'var(--border2)',
+				border: 'none', cursor: 'pointer', position: 'relative',
+				transition: 'background .2s', flexShrink: 0
+			  }}>
+				<div style={{
+				  position: 'absolute', top: '3px',
+				  left: isDark ? '20px' : '3px',
+				  width: '16px', height: '16px', borderRadius: '50%',
+				  background: '#fff', transition: 'left .2s'
+				}} />
+			  </button>
+			</div>
 
-            {/* Idioma */}
-            <button onClick={() => { setShowSettings(true); setMenuOpen(false) }} style={{
-              width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
-              padding: '10px 12px', borderRadius: '8px', border: 'none',
-              background: 'none', color: 'var(--text)', cursor: 'pointer',
-              fontFamily: 'Syne, sans-serif', fontSize: '13px', textAlign: 'left'
-            }}>
-              🌐 Idioma
-            </button>
+			<div style={{ height: '1px', background: 'var(--border)', margin: '8px 0' }} />
 
-            {/* Privacidad */}
-            <button onClick={() => { setShowPrivacy(true); setMenuOpen(false) }} style={{
-              width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
-              padding: '10px 12px', borderRadius: '8px', border: 'none',
-              background: 'none', color: 'var(--text)', cursor: 'pointer',
-              fontFamily: 'Syne, sans-serif', fontSize: '13px', textAlign: 'left'
-            }}>
-              ⚖️ Privacidad
-            </button>
-          </div>
-        </>
-      )}
+			{/* Idioma */}
+			<button onClick={() => { setShowSettings(true); setMenuOpen(false) }} style={{
+			  width: '100%', display: 'flex', alignItems: 'center', gap: '12px',
+			  padding: '12px 10px', borderRadius: '10px', border: 'none',
+			  background: 'none', color: 'var(--text)', cursor: 'pointer',
+			  fontFamily: 'Syne, sans-serif', fontSize: '14px', textAlign: 'left',
+			  marginBottom: '4px'
+			}}>
+			  🌐 Idioma
+			</button>
+
+			{/* Privacidad */}
+			<button onClick={() => { setShowPrivacy(true); setMenuOpen(false) }} style={{
+			  width: '100%', display: 'flex', alignItems: 'center', gap: '12px',
+			  padding: '12px 10px', borderRadius: '10px', border: 'none',
+			  background: 'none', color: 'var(--text)', cursor: 'pointer',
+			  fontFamily: 'Syne, sans-serif', fontSize: '14px', textAlign: 'left'
+			}}>
+			  ⚖️ Privacidad
+			</button>
+		  </div>
+		</div>
+
+		{/* Overlay */}
+		{menuOpen && (
+		  <div onClick={() => setMenuOpen(false)} style={{
+			position: 'fixed', inset: 0, zIndex: 299,
+			background: 'rgba(0,0,0,0.5)'
+		  }} />
+		)}
 
       {showProfile  && <ProfileView  onClose={() => setShowProfile(false)}  toast={toast} />}
       {showPrivacy  && <PrivacyView  onClose={() => setShowPrivacy(false)} />}
