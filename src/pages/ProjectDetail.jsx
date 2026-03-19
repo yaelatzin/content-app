@@ -133,7 +133,7 @@ export default function ProjectDetail({ project, workstreams, onClose, onEdit, o
           {['Not Started', 'In Progress', 'Completed', 'Cancelled'].map(s => (
             <button key={s} onClick={() => onStatusChange(project.id, s)} style={{
               padding: '6px 12px', borderRadius: '8px', fontSize: '11px',
-              fontFamily: 'Syne, sans-serif', cursor: 'pointer',
+              fontFamily: 'Montserrat, sans-serif', cursor: 'pointer',
               border: project.status === s ? '1px solid var(--accent)' : '1px solid var(--border2)',
               background: project.status === s ? 'var(--accent-bg)' : 'transparent',
               color: project.status === s ? 'var(--accent)' : 'var(--text2)',

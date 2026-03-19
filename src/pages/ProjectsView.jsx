@@ -146,7 +146,7 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
                       {['Not Started', 'In Progress', 'Completed'].map(s => (
                         <button key={s} onClick={() => quickStatus(p.id, s)} style={{
                           padding: '5px 10px', borderRadius: '6px', fontSize: '11px',
-                          fontFamily: 'Syne, sans-serif', cursor: 'pointer',
+                          fontFamily: 'Montserrat, sans-serif', cursor: 'pointer',
                           border: p.status === s ? '1px solid var(--accent)' : '1px solid var(--border2)',
                           background: p.status === s ? 'var(--accent-bg)' : 'transparent',
                           color: p.status === s ? 'var(--accent)' : 'var(--text2)',

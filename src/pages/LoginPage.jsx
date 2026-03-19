@@ -110,7 +110,7 @@ export default function LoginPage() {
             style={{
               background: 'none', border: 'none',
               color: 'var(--accent)', cursor: 'pointer',
-              fontFamily: 'Syne, sans-serif', fontSize: '13px', fontWeight: 600
+              fontFamily: 'Montserrat, sans-serif', fontSize: '13px', fontWeight: 600
             }}
           >
             {mode === 'login' ? 'Regístrate' : 'Inicia sesión'}

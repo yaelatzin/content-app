@@ -92,7 +92,7 @@ export default function NavBar({ currentView, setView }) {
               background: profile?.avatar_url ? 'transparent' : 'var(--accent-bg)',
               border: '2px solid var(--accent-border)',
               color: 'var(--accent)',
-              fontFamily: 'Syne, sans-serif', fontSize: '12px', fontWeight: 700,
+              fontFamily: 'Montserrat, sans-serif', fontSize: '12px', fontWeight: 700,
               cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               overflow: 'hidden', padding: 0
@@ -119,7 +119,7 @@ export default function NavBar({ currentView, setView }) {
               border: currentView === v.id ? 'none' : '1px solid var(--border2)',
               background: currentView === v.id ? 'var(--accent)' : 'transparent',
               color: currentView === v.id ? '#0d0d0f' : 'var(--text2)',
-              fontFamily: 'Syne, sans-serif', fontSize: '12px',
+              fontFamily: 'Montserrat, sans-serif', fontSize: '12px',
               fontWeight: currentView === v.id ? 700 : 400,
               cursor: 'pointer', transition: 'all .15s'
             }}>{v.label}</button>
@@ -187,7 +187,7 @@ export default function NavBar({ currentView, setView }) {
 			  width: '100%', display: 'flex', alignItems: 'center', gap: '12px',
 			  padding: '12px 10px', borderRadius: '10px', border: 'none',
 			  background: 'none', color: 'var(--text)', cursor: 'pointer',
-			  fontFamily: 'Syne, sans-serif', fontSize: '14px', textAlign: 'left',
+			  fontFamily: 'Montserrat, sans-serif', fontSize: '14px', textAlign: 'left',
 			  marginBottom: '4px'
 			}}>
 			  🌐 Idioma
