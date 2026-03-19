@@ -33,10 +33,16 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
   const [detail, setDetail] = useState(null)
   const [deleting, setDeleting] = useState(null)
 
-  const filtered = useMemo(() =>
-    filter === 'all' ? projects : projects.filter(p => p.status === filter),
-    [projects, filter]
-  )
+  const STATUS_ORDER = { 'Not Started': 0, 'In Progress': 1, '': 2, 'Cancelled': 3, 'Completed': 4 }
+
+	const filtered = useMemo(() => {
+	  const list = filter === 'all' ? projects : projects.filter(p => p.status === filter)
+	  return [...list].sort((a, b) => {
+		const orderDiff = (STATUS_ORDER[a.status] ?? 2) - (STATUS_ORDER[b.status] ?? 2)
+		if (orderDiff !== 0) return orderDiff
+		return new Date(b.created_at) - new Date(a.created_at)
+	  })
+	}, [projects, filter])
 
   async function handleSave(form) {
     const payload = {
