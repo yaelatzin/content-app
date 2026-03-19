@@ -4,8 +4,12 @@ import { useAuth } from '../hooks/useAuth'
 
 export default function TasksView({ tasks, projects, onRefresh, toast }) {
   const { user } = useAuth()
-  const [newTitle, setNewTitle] = useState('')
-  const [newProject, setNewProject] = useState('')
+  const [newTitle, setNewTitle] = useState(() => {
+  return localStorage.getItem('task_draft_title') || ''
+	})
+	const [newProject, setNewProject] = useState(() => {
+	  return localStorage.getItem('task_draft_project') || ''
+	})
   const [adding, setAdding] = useState(false)
   const [showForm, setShowForm] = useState(false)
 
@@ -19,7 +23,8 @@ export default function TasksView({ tasks, projects, onRefresh, toast }) {
       done: false,
       user_id: user.id,
     })
-    if (!error) { toast('Tarea agregada'); onRefresh(); setNewTitle(''); setNewProject(''); setShowForm(false) }
+    if (!error) { toast('Tarea agregada'); onRefresh(); setNewTitle(''); setNewProject(''); localStorage.removeItem('task_draft_title'); localStorage.removeItem('task_draft_project'); setShowForm(false) }
+	
     else toast(error.message, 'error')
     setAdding(false)
   }
@@ -60,13 +65,14 @@ export default function TasksView({ tasks, projects, onRefresh, toast }) {
             <div className="form-group">
               <label className="form-label">Nombre de la tarea</label>
               <input className="input" value={newTitle}
-                onChange={e => setNewTitle(e.target.value)}
+                onChange={e => { setNewTitle(e.target.value); localStorage.setItem('task_draft_title', e.target.value) }}
+				
                 placeholder="Ej: Grabar video, editar, subir..." autoFocus />
             </div>
             <div className="form-group">
               <label className="form-label">Proyecto (opcional)</label>
               <select className="select input" value={newProject}
-                onChange={e => setNewProject(e.target.value)}>
+                onChange={e => { setNewProject(e.target.value); localStorage.setItem('task_draft_project', e.target.value) }}>
                 <option value="">Sin proyecto</option>
                 {projects.map(p => <option key={p.id} value={p.id}>{p.title}</option>)}
               </select>
