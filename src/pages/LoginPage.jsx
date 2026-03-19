@@ -18,7 +18,7 @@ export default function LoginPage() {
       if (mode === 'magic') {
         const { error } = await supabase.auth.signInWithOtp({
 		  email,
-		  options: { emailRedirectTo: 'https://content-app.vercel.app' }
+		  options: { emailRedirectTo: 'https://content-app-henna.vercel.app' }
 		})
         if (error) throw error
         setSuccess('¡Link enviado! Revisa tu email y haz clic en el link para entrar.')
