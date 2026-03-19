@@ -231,3 +231,13 @@ body.light {
   --accent-bg:     rgba(244,186,21,0.12);
   --accent-border: rgba(244,186,21,0.30);
 }
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(0.95); }
+}
+
+@keyframes loading-bar {
+  0%   { width: 0%;   margin-left: 0%; }
+  50%  { width: 70%;  margin-left: 15%; }
+  100% { width: 0%;   margin-left: 100%; }
+}
