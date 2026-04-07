@@ -1,14 +1,17 @@
-const CACHE = 'content-app-v1'
-const ASSETS = ['/', '/index.html', '/static/js/main.chunk.js', '/static/css/main.chunk.css']
+const CACHE = 'content-app-v2'
 
 self.addEventListener('install', e => {
+  self.skipWaiting()
+})
+
+self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
+    caches.keys().then(keys =>
+      Promise.all(keys.map(key => caches.delete(key)))
+    )
   )
 })
 
 self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request))
-  )
+  e.respondWith(fetch(e.request).catch(() => caches.match(e.request)))
 })
