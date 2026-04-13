@@ -1,0 +1,4 @@
+/* Agrega estas líneas al FINAL de src/index.css */
+
+.pill-grabado  { background: rgba(139,92,246,0.12); color: #a78bfa; }
+.pill-edicion  { background: rgba(236,72,153,0.12);  color: #f472b6; }

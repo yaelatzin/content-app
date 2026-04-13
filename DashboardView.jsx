@@ -6,25 +6,11 @@ function fmtDate(d) {
   return `${day}/${m}/${y}`
 }
 
-function StatusPill({ status }) {
-  const map = {
-    'Completed':  'pill-completed',
-    'Not Started':'pill-notstarted',
-    'In Progress':'pill-inprogress',
-    'Cancelled':  'pill-cancelled',
-  }
-  return (
-    <span className={`pill ${map[status] || 'pill-empty'}`}>
-      {status || 'Sin estado'}
-    </span>
-  )
-}
-
 export default function DashboardView({ projects, setView }) {
   const stats = useMemo(() => {
     const total    = projects.length
-    const done     = projects.filter(p => p.status === 'Completed').length
-    const pending  = projects.filter(p => p.status === 'Not Started').length
+    const done     = projects.filter(p => p.status === 'Publicado').length
+    const pending  = projects.filter(p => p.status === 'No empezado').length
     const progress = total ? Math.round((done / total) * 100) : 0
     return { total, done, pending, progress }
   }, [projects])
@@ -32,7 +18,7 @@ export default function DashboardView({ projects, setView }) {
   const upcoming = useMemo(() => {
     const today = new Date()
     return projects
-      .filter(p => p.status !== 'Completed' && p.due)
+      .filter(p => p.status !== 'Publicado' && p.due)
       .sort((a, b) => new Date(a.due) - new Date(b.due))
       .slice(0, 4)
       .map(p => {
@@ -43,7 +29,7 @@ export default function DashboardView({ projects, setView }) {
   }, [projects])
 
   const recent = useMemo(() =>
-    projects.filter(p => p.status === 'Completed')
+    projects.filter(p => p.status === 'Publicado')
       .sort((a, b) => new Date(b.completed || 0) - new Date(a.completed || 0))
       .slice(0, 4),
     [projects]
@@ -52,7 +38,6 @@ export default function DashboardView({ projects, setView }) {
   return (
     <div style={{ padding: '20px', maxWidth: '480px', margin: '0 auto' }}>
 
-      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h1 className="anton" style={{ fontSize: '22px' }}>Resumen</h1>
         <span className="badge">
@@ -60,11 +45,10 @@ export default function DashboardView({ projects, setView }) {
         </span>
       </div>
 
-      {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px', marginBottom: '20px' }}>
         {[
           { label: 'Total',      value: stats.total,   color: 'var(--text)' },
-          { label: 'Listos',     value: stats.done,    color: 'var(--green)' },
+          { label: 'Publicados', value: stats.done,    color: 'var(--green)' },
           { label: 'Pendientes', value: stats.pending, color: 'var(--amber)' },
         ].map(s => (
           <div key={s.label} className="card" style={{ padding: '14px 12px' }}>
@@ -76,7 +60,6 @@ export default function DashboardView({ projects, setView }) {
         ))}
       </div>
 
-      {/* Progress */}
       <div style={{ marginBottom: '24px' }}>
         <div style={{ fontSize: '11px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>
           Progreso general
@@ -95,12 +78,11 @@ export default function DashboardView({ projects, setView }) {
         </div>
       </div>
 
-      {/* Upcoming */}
       <div style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ fontSize: '11px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
           Próximos a vencer
         </div>
-        <button onClick={() => setView('projects')} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: '11px', cursor: 'pointer', fontFamily: 'Syne, sans-serif' }}>
+        <button onClick={() => setView('projects')} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: '11px', cursor: 'pointer', fontFamily: 'Montserrat, sans-serif' }}>
           Ver todos →
         </button>
       </div>
@@ -114,7 +96,7 @@ export default function DashboardView({ projects, setView }) {
               <div key={p.id} className="card" style={{ marginBottom: '8px', padding: '12px 14px', cursor: 'pointer' }}
                 onClick={() => setView('projects')}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: 600, flex: 1 }}>{p.title}</span>
+                  <span className="anton" style={{ fontSize: '14px', flex: 1 }}>{p.title}</span>
                   <span style={{ fontSize: '11px', color: col, fontFamily: 'DM Mono, monospace', flexShrink: 0 }}>{label}</span>
                 </div>
                 <div style={{ fontSize: '11px', color: 'var(--text3)', marginTop: '4px', fontFamily: 'DM Mono, monospace' }}>
@@ -125,11 +107,10 @@ export default function DashboardView({ projects, setView }) {
           })
       }
 
-      {/* Recent */}
       {recent.length > 0 && (
         <>
           <div style={{ fontSize: '11px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: '24px', marginBottom: '10px' }}>
-            Completados recientemente
+            Publicados recientemente
           </div>
           {recent.map(p => (
             <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 0', borderBottom: '1px solid var(--border)' }}>

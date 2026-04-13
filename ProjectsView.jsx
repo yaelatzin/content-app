@@ -6,17 +6,28 @@ import ProjectDetail from './ProjectDetail'
 
 const FILTERS = [
   { key: 'all',         label: 'Todos' },
-  { key: 'Not Started', label: 'Pendientes' },
-  { key: 'In Progress', label: 'En progreso' },
-  { key: 'Completed',   label: 'Completados' },
-  { key: 'Cancelled',   label: 'Cancelados' },
+  { key: 'No empezado', label: 'No empezado' },
+  { key: 'En guión',    label: 'En guión' },
+  { key: 'Grabado',     label: 'Grabado' },
+  { key: 'En edición',  label: 'En edición' },
+  { key: 'Publicado',   label: 'Publicado' },
 ]
 
 const STATUS_CLASS = {
-  'Completed':  'pill-completed',
-  'Not Started':'pill-notstarted',
-  'In Progress':'pill-inprogress',
-  'Cancelled':  'pill-cancelled',
+  'No empezado': 'pill-notstarted',
+  'En guión':    'pill-inprogress',
+  'Grabado':     'pill-grabado',
+  'En edición':  'pill-edicion',
+  'Publicado':   'pill-completed',
+}
+
+const STATUS_ORDER = {
+  'No empezado': 0,
+  'En guión':    1,
+  'Grabado':     2,
+  'En edición':  3,
+  '':            4,
+  'Publicado':   5,
 }
 
 function fmtDate(d) {
@@ -31,18 +42,15 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
   const [expanded, setExpanded] = useState(null)
   const [modal, setModal] = useState(null)
   const [detail, setDetail] = useState(null)
-  const [deleting, setDeleting] = useState(null)
 
-  const STATUS_ORDER = { 'Not Started': 0, 'In Progress': 1, '': 2, 'Cancelled': 3, 'Completed': 4 }
-
-	const filtered = useMemo(() => {
-	  const list = filter === 'all' ? projects : projects.filter(p => p.status === filter)
-	  return [...list].sort((a, b) => {
-		const orderDiff = (STATUS_ORDER[a.status] ?? 2) - (STATUS_ORDER[b.status] ?? 2)
-		if (orderDiff !== 0) return orderDiff
-		return new Date(b.created_at) - new Date(a.created_at)
-	  })
-	}, [projects, filter])
+  const filtered = useMemo(() => {
+    const list = filter === 'all' ? projects : projects.filter(p => p.status === filter)
+    return [...list].sort((a, b) => {
+      const orderDiff = (STATUS_ORDER[a.status] ?? 4) - (STATUS_ORDER[b.status] ?? 4)
+      if (orderDiff !== 0) return orderDiff
+      return new Date(b.created_at) - new Date(a.created_at)
+    })
+  }, [projects, filter])
 
   async function handleSave(form) {
     const payload = {
@@ -52,7 +60,7 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
       started: form.started || null,
       due: form.due || null,
       completed: form.completed || null,
-      status: form.status || 'Not Started',
+      status: form.status || 'No empezado',
       script: form.script || null,
       user_id: user.id,
     }
@@ -69,7 +77,7 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
   }
 
   async function quickStatus(id, status) {
-    const extra = status === 'Completed' ? { completed: new Date().toISOString().split('T')[0] } : {}
+    const extra = status === 'Publicado' ? { completed: new Date().toISOString().split('T')[0] } : {}
     const { error } = await supabase.from('projects').update({ status, ...extra }).eq('id', id)
     if (!error) { toast('Status actualizado'); onRefresh() }
     else toast(error.message, 'error')
@@ -78,18 +86,14 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
   return (
     <div style={{ padding: '20px', maxWidth: '480px', margin: '0 auto' }}>
 
-      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <h1 className="anton" style={{ fontSize: '22px' }}>Resumen</h1>
+        <h1 className="anton" style={{ fontSize: '22px' }}>Proyectos</h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span className="badge">{filtered.length}</span>
-          <button className="btn btn-primary btn-sm" onClick={() => setModal('new')}>
-            + Nuevo
-          </button>
+          <button className="btn btn-primary btn-sm" onClick={() => setModal('new')}>+ Nuevo</button>
         </div>
       </div>
 
-      {/* Filters */}
       <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', marginBottom: '16px', paddingBottom: '4px' }}>
         {FILTERS.map(f => (
           <button key={f.key} onClick={() => setFilter(f.key)} style={{
@@ -97,12 +101,11 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
             border: '1px solid var(--border2)',
             background: filter === f.key ? 'var(--surface3)' : 'transparent',
             color: filter === f.key ? 'var(--text)' : 'var(--text2)',
-            fontFamily: 'DM Mono, monospace', fontSize: '11px', cursor: 'pointer'
+            fontFamily: 'Montserrat, monospace', fontSize: '11px', cursor: 'pointer'
           }}>{f.label}</button>
         ))}
       </div>
 
-      {/* List */}
       {filtered.length === 0
         ? <div className="empty-state">No hay proyectos aquí</div>
         : filtered.map(p => {
@@ -113,10 +116,8 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
                 marginBottom: '10px', cursor: 'pointer',
                 borderColor: isOpen ? 'var(--accent-border)' : undefined,
                 transition: 'border-color .2s'
-              }}
-                onClick={() => setExpanded(isOpen ? null : p.id)}>
+              }} onClick={() => setExpanded(isOpen ? null : p.id)}>
 
-                {/* Top row */}
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
                   <div className="anton" style={{ flex: 1, fontSize: '15px', lineHeight: 1.3 }}>{p.title}</div>
                   <span className={`pill ${STATUS_CLASS[p.status] || 'pill-empty'}`}>
@@ -124,13 +125,8 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
                   </span>
                 </div>
 
-                {/* Meta */}
                 <div style={{ display: 'flex', gap: '12px', marginTop: '10px', flexWrap: 'wrap' }}>
-                  {ws && (
-                    <span style={{ fontSize: '11px', color: 'var(--accent)', fontFamily: 'DM Mono, monospace' }}>
-                      {ws.name}
-                    </span>
-                  )}
+                  {ws && <span style={{ fontSize: '11px', color: 'var(--accent)', fontFamily: 'DM Mono, monospace' }}>{ws.name}</span>}
                   <span style={{ fontSize: '11px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace' }}>
                     Vence {fmtDate(p.due)}
                   </span>
@@ -141,15 +137,11 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
                   )}
                 </div>
 
-                {/* Expanded */}
                 {isOpen && (
-                  <div
-                    style={{ borderTop: '1px solid var(--border)', marginTop: '12px', paddingTop: '12px' }}
-                    onClick={e => e.stopPropagation()}
-                  >
-                    {/* Quick status */}
+                  <div style={{ borderTop: '1px solid var(--border)', marginTop: '12px', paddingTop: '12px' }}
+                    onClick={e => e.stopPropagation()}>
                     <div style={{ display: 'flex', gap: '6px', marginBottom: '10px', flexWrap: 'wrap' }}>
-                      {['Not Started', 'In Progress', 'Completed'].map(s => (
+                      {['No empezado', 'En guión', 'Grabado', 'En edición', 'Publicado'].map(s => (
                         <button key={s} onClick={() => quickStatus(p.id, s)} style={{
                           padding: '5px 10px', borderRadius: '6px', fontSize: '11px',
                           fontFamily: 'Montserrat, sans-serif', cursor: 'pointer',
@@ -159,12 +151,8 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
                         }}>{s}</button>
                       ))}
                     </div>
-
-                    {/* Botón abrir */}
-                    <button
-                      className="btn btn-primary btn-full"
-                      onClick={() => { setDetail(p); setExpanded(null) }}
-                    >
+                    <button className="btn btn-primary btn-full"
+                      onClick={() => { setDetail(p); setExpanded(null) }}>
                       Abrir →
                     </button>
                   </div>
@@ -174,7 +162,6 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
           })
       }
 
-      {/* Modal */}
       {modal && (
         <ProjectModal
           project={modal === 'new' ? null : modal}
@@ -184,7 +171,6 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
         />
       )}
 
-      {/* Detalle */}
       {detail && (
         <ProjectDetail
           project={detail}

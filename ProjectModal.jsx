@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const STATUS_OPTIONS = ['Not Started', 'In Progress', 'Completed', 'Cancelled']
+const STATUS_OPTIONS = ['No empezado', 'En guión', 'Grabado', 'En edición', 'Publicado']
 const DRAFT_KEY = 'project_modal_draft'
 
 export default function ProjectModal({ project, workstreams, onSave, onClose }) {
@@ -10,17 +10,15 @@ export default function ProjectModal({ project, workstreams, onSave, onClose }) 
     if (isEdit) return {
       title: '', description: '', workstream_id: '',
       started: new Date().toISOString().split('T')[0],
-      due: '', status: 'Not Started', completed: '', script: '',
+      due: '', status: 'No empezado', completed: '', script: '',
       ...project, completed: project?.completed || '', script: project?.script || ''
     }
     const saved = localStorage.getItem(DRAFT_KEY)
-    if (saved) {
-      try { return JSON.parse(saved) } catch {}
-    }
+    if (saved) { try { return JSON.parse(saved) } catch {} }
     return {
       title: '', description: '', workstream_id: '',
       started: new Date().toISOString().split('T')[0],
-      due: '', status: 'Not Started', completed: '', script: ''
+      due: '', status: 'No empezado', completed: '', script: ''
     }
   })
 
@@ -28,9 +26,7 @@ export default function ProjectModal({ project, workstreams, onSave, onClose }) 
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (!isEdit) {
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(form))
-    }
+    if (!isEdit) localStorage.setItem(DRAFT_KEY, JSON.stringify(form))
   }, [form, isEdit])
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
@@ -107,7 +103,7 @@ export default function ProjectModal({ project, workstreams, onSave, onClose }) 
           <div className="form-row">
             <div className="form-group">
               <label className="form-label">Status</label>
-              <select className="select input" value={form.status || 'Not Started'}
+              <select className="select input" value={form.status || 'No empezado'}
                 onChange={e => set('status', e.target.value)}>
                 {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
@@ -121,19 +117,14 @@ export default function ProjectModal({ project, workstreams, onSave, onClose }) 
 
           <div className="form-group">
             <label className="form-label">Guion del video</label>
-            <textarea
-              className="textarea input"
-              value={form.script || ''}
+            <textarea className="textarea input" value={form.script || ''}
               onChange={e => set('script', e.target.value)}
               placeholder="Escribe aquí el guion, ideas, estructura del video..."
-              style={{ minHeight: '140px' }}
-            />
+              style={{ minHeight: '140px' }} />
           </div>
 
           <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
-            <button type="button" className="btn btn-ghost btn-full" onClick={handleClose}>
-              Cancelar
-            </button>
+            <button type="button" className="btn btn-ghost btn-full" onClick={handleClose}>Cancelar</button>
             <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
               {loading
                 ? <span className="spinner" style={{ width: 16, height: 16 }} />
