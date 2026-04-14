@@ -241,3 +241,6 @@ body.light {
   50%  { width: 70%;  margin-left: 15%; }
   100% { width: 0%;   margin-left: 100%; }
 }
+
+.pill-grabado  { background: rgba(139,92,246,0.12); color: #a78bfa; }
+.pill-edicion  { background: rgba(236,72,153,0.12);  color: #f472b6; }
