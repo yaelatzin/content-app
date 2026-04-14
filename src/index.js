@@ -10,6 +10,5 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/serviceWorker.js')
   })
 }
-
 .pill-grabado  { background: rgba(139,92,246,0.12); color: #a78bfa; }
 .pill-edicion  { background: rgba(236,72,153,0.12);  color: #f472b6; }
