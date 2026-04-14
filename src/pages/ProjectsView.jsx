@@ -5,12 +5,12 @@ import ProjectModal from '../components/ProjectModal'
 import ProjectDetail from './ProjectDetail'
 
 const FILTERS = [
-  { key: 'all',         label: 'Todos' },
-  { key: 'No empezado', label: 'No empezado' },
-  { key: 'En guión',    label: 'En guión' },
-  { key: 'Grabado',     label: 'Grabado' },
-  { key: 'En edición',  label: 'En edición' },
-  { key: 'Publicado',   label: 'Publicado' },
+  { key: 'all',          label: 'Todos' },
+  { key: 'No empezado',  label: 'No empezado' },
+  { key: 'En guión',     label: 'En guión' },
+  { key: 'Grabado',      label: 'Grabado' },
+  { key: 'En edición',   label: 'En edición' },
+  { key: 'Publicado',    label: 'Publicado' },
 ]
 
 const STATUS_CLASS = {

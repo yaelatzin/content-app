@@ -9,8 +9,8 @@ function fmtDate(d) {
 export default function DashboardView({ projects, setView }) {
   const stats = useMemo(() => {
     const total    = projects.length
-    const done     = projects.filter(p => p.status === 'Publicado').length
-    const pending  = projects.filter(p => p.status === 'No empezado').length
+    const done = projects.filter(p => p.status === 'Publicado').length
+	const pending = projects.filter(p => p.status === 'No empezado').length
     const progress = total ? Math.round((done / total) * 100) : 0
     return { total, done, pending, progress }
   }, [projects])
