@@ -83,6 +83,12 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
     else toast(error.message, 'error')
   }
 
+	function shareProject(e, id) {
+    e.stopPropagation()
+    const url = `${window.location.origin}/share?id=${id}`
+    navigator.clipboard.writeText(url).then(() => toast('Link copiado 🔗', 'success'))
+  }
+
   return (
     <div style={{ padding: '20px', maxWidth: '480px', margin: '0 auto' }}>
 
@@ -138,24 +144,22 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
                 </div>
 
                 {isOpen && (
-                  <div style={{ borderTop: '1px solid var(--border)', marginTop: '12px', paddingTop: '12px' }}
-                    onClick={e => e.stopPropagation()}>
-                    <div style={{ display: 'flex', gap: '6px', marginBottom: '10px', flexWrap: 'wrap' }}>
-                      {['No empezado', 'En guión', 'Grabado', 'En edición', 'Publicado'].map(s => (
-                        <button key={s} onClick={() => quickStatus(p.id, s)} style={{
-                          padding: '5px 10px', borderRadius: '6px', fontSize: '11px',
-                          fontFamily: 'Montserrat, sans-serif', cursor: 'pointer',
-                          border: p.status === s ? '1px solid var(--accent)' : '1px solid var(--border2)',
-                          background: p.status === s ? 'var(--accent-bg)' : 'transparent',
-                          color: p.status === s ? 'var(--accent)' : 'var(--text2)',
-                        }}>{s}</button>
-                      ))}
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                      <button className="btn btn-primary btn-full"
+                        onClick={() => { setDetail(p); setExpanded(null) }}>
+                        Abrir →
+                      </button>
+                      <button
+                        onClick={(e) => shareProject(e, p.id)}
+                        style={{
+                          flexShrink: 0, padding: '8px 14px', borderRadius: '8px',
+                          border: '1px solid var(--border2)', background: 'transparent',
+                          color: 'var(--text2)', fontFamily: 'Montserrat, sans-serif',
+                          fontSize: '12px', cursor: 'pointer'
+                        }}>
+                        🔗 Compartir
+                      </button>
                     </div>
-                    <button className="btn btn-primary btn-full"
-                      onClick={() => { setDetail(p); setExpanded(null) }}>
-                      Abrir →
-                    </button>
-                  </div>
                 )}
               </div>
             )
@@ -180,6 +184,13 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
           onDelete={() => { setDetail(null); onRefresh() }}
           onStatusChange={(id, status) => {
             quickStatus(id, status)
+			
+			function shareProject(e, id) {
+				e.stopPropagation()
+				const url = `${window.location.origin}/share?id=${id}`
+				navigator.clipboard.writeText(url).then(() => toast('🔗 Link copiado', 'success'))
+			  }
+			
             const updated = projects.find(p => p.id === id)
             if (updated) setDetail(Object.assign({}, updated, { status }))
           }}

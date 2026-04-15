@@ -9,6 +9,7 @@ import DashboardView from './pages/DashboardView'
 import ProjectsView from './pages/ProjectsView'
 import TasksView from './pages/TasksView'
 import WorkstreamsView from './pages/WorkstreamsView'
+import ShareView from './pages/ShareView'
 import './index.css'
 
 function AppContent() {
@@ -91,6 +92,10 @@ function AppContent() {
 
   if (window.location.pathname === '/reset-password') {
     return <ResetPassword />
+  }
+  
+  if (window.location.pathname === '/share') {
+    return <ShareView />
   }
 
   if (authLoading || dataLoading) {
