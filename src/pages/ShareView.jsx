@@ -20,18 +20,24 @@ export default function ShareView() {
   const [error, setError]     = useState(null)
 
   useEffect(() => {
-    const id = new URLSearchParams(window.location.search).get('id')
-    if (!id) { setError('Link inválido.'); return }
-    supabase
-      .from('projects')
-      .select('id, title, description, status, started, due, script')
-      .eq('id', id)
-      .single()
-      .then(({ data, error }) => {
-        if (error || !data) setError('Idea no encontrada.')
-        else setProject(data)
-      })
-  }, [])
+  const id = new URLSearchParams(window.location.search).get('id')
+  if (!id) { setError('Link inválido.'); return }
+
+  // Validar que sea un UUID real antes de consultar
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  if (!uuidRegex.test(id)) { setError('Link inválido.'); return }
+
+  supabase
+    .from('projects')
+    .select('id, title, description, status, started, due, script')
+    .eq('id', id)       // solo busca ESE proyecto específico
+    .maybeSingle()      // si no existe, devuelve null sin error
+    .then(({ data, error }) => {
+      if (error) { setError('Error al cargar la idea.'); return }
+      if (!data)  { setError('Idea no encontrada.'); return }
+      setProject(data)
+    })
+}, [])
 
   if (error) return (
     <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text2)', fontFamily: 'Montserrat, sans-serif' }}>
