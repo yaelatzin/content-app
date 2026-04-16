@@ -93,10 +93,6 @@ function AppContent() {
   if (window.location.pathname === '/reset-password') {
     return <ResetPassword />
   }
-
-  if (window.location.pathname === '/share') {
-    return <ShareView />
-  }
   
   if (window.location.pathname === '/share') {
     return <ShareView />
