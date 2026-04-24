@@ -12,16 +12,26 @@ const VIEWS = [
   { id: 'workstreams', label: 'Workstreams' },
 ]
 
+const CreaderoLogo = ({ height = 32 }) => (
+  <svg height={height} viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#f4ba15" d="M251.58,461.14c0-125.78,96.88-225.21,224.36-225.21,70.54,0,130.03,30.59,165.72,73.08,5.95,6.8,10.2,16.15,10.2,23.8,0,18.69-14.45,31.44-34,31.44-12.75,0-19.55-6.8-28.89-14.45-26.35-29.74-64.59-50.99-113.03-50.99-86.68,0-155.52,71.39-155.52,162.32s68.84,162.32,155.52,162.32c47.59,0,86.69-21.25,113.03-50.99,8.5-7.65,16.15-15.3,28.89-15.3,19.55,0,34,13.6,34,32.3,0,6.8-4.25,16.15-10.2,22.95-35.69,42.49-94.33,73.94-165.72,73.94-127.48,0-224.36-99.44-224.36-225.21Z"/>
+    <path fill="#f4ba15" d="M489.9,356.24c-61.96,1.97-106.75,52.29-107.57,113.7-.1,7.5-20.55,7.85-21.11-.11-5.28-74.41,54.98-136.09,128.39-136.94,8.65-.1,12.62,4.16,13.33,9.64,1.04,8.01-3.55,13.41-13.03,13.71Z"/>
+    <rect fill="#f4ba15" x="701.11" y="363.98" width="26.85" height="194.31" rx="13.43" ry="13.43"/>
+    <rect fill="#f4ba15" x="749.39" y="389.79" width="29.45" height="142.69" rx="13.43" ry="13.43"/>
+    <rect fill="#f4ba15" x="799.47" y="407.82" width="28.95" height="106.62" rx="13.43" ry="13.43"/>
+  </svg>
+)
+
 export default function NavBar({ currentView, setView }) {
   const { user, signOut } = useAuth()
   const { toast, ToastContainer } = useToast()
-  const [showPrivacy,    setShowPrivacy]    = useState(false)
-  const [showSettings,   setShowSettings]   = useState(false)
-  const [menuOpen,       setMenuOpen]       = useState(false)
-  const [profileOpen,    setProfileOpen]    = useState(false)
+  const [showPrivacy,     setShowPrivacy]     = useState(false)
+  const [showSettings,    setShowSettings]    = useState(false)
+  const [menuOpen,        setMenuOpen]        = useState(false)
+  const [profileOpen,     setProfileOpen]     = useState(false)
   const [showEditProfile, setShowEditProfile] = useState(false)
-  const [profile,        setProfile]        = useState(null)
-  const [isDark,         setIsDark]         = useState(() => {
+  const [profile,         setProfile]         = useState(null)
+  const [isDark,          setIsDark]          = useState(() => {
     return localStorage.getItem('theme') !== 'light'
   })
 
@@ -45,7 +55,6 @@ export default function NavBar({ currentView, setView }) {
 
   return (
     <>
-      {/* NAVBAR */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
         background: 'var(--bg)',
@@ -71,11 +80,8 @@ export default function NavBar({ currentView, setView }) {
             ))}
           </button>
 
-          {/* Logo center */}
-          <svg height="26" viewBox="0 0 147.73 133.36" xmlns="http://www.w3.org/2000/svg">
-            <path fill="#f4ba15" d="M24.64,76.31L0,1.85h21.67l13.89,47.6h.37L49.83,1.85h19.82l-24.64,74.46v55.2h-20.38v-55.2Z"/>
-            <path fill="#f4ba15" d="M94.76,124.94c-5.19-5.62-7.78-13.68-7.78-24.17V32.6c0-10.49,2.59-18.55,7.78-24.17,5.19-5.62,12.72-8.43,22.6-8.43s17.41,2.81,22.6,8.43c5.19,5.62,7.78,13.68,7.78,24.17v11.11h-19.26v-12.41c0-8.52-3.52-12.78-10.56-12.78s-10.56,4.26-10.56,12.78v70.94c0,8.4,3.52,12.59,10.56,12.59s10.56-4.2,10.56-12.59v-25.38h-10.19v-18.52h29.45v42.42c0,10.5-2.59,18.55-7.78,24.17-5.19,5.62-12.72,8.43-22.6,8.43s-17.41-2.81-22.6-8.43Z"/>
-          </svg>
+          {/* Logo Creadero */}
+          <CreaderoLogo height={36} />
 
           {/* Avatar */}
           <button onClick={() => setProfileOpen(!profileOpen)} style={{
@@ -110,7 +116,7 @@ export default function NavBar({ currentView, setView }) {
         </div>
       </div>
 
-      {/* SIDEBAR IZQUIERDO — Hamburguesa */}
+      {/* SIDEBAR IZQUIERDO */}
       <div style={{
         position: 'fixed', top: 0, left: menuOpen ? 0 : '-260px',
         width: '260px', height: '100vh',
@@ -118,16 +124,12 @@ export default function NavBar({ currentView, setView }) {
         borderRight: '1px solid var(--border2)',
         zIndex: 300, transition: 'left .25s ease',
         display: 'flex', flexDirection: 'column',
-        padding: '0 0 40px'
       }}>
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '16px 20px', borderBottom: '1px solid var(--border)'
         }}>
-          <svg height="24" viewBox="0 0 147.73 133.36" xmlns="http://www.w3.org/2000/svg">
-            <path fill="#f4ba15" d="M24.64,76.31L0,1.85h21.67l13.89,47.6h.37L49.83,1.85h19.82l-24.64,74.46v55.2h-20.38v-55.2Z"/>
-            <path fill="#f4ba15" d="M94.76,124.94c-5.19-5.62-7.78-13.68-7.78-24.17V32.6c0-10.49,2.59-18.55,7.78-24.17,5.19-5.62,12.72-8.43,22.6-8.43s17.41,2.81,22.6,8.43c5.19,5.62,7.78,13.68,7.78,24.17v11.11h-19.26v-12.41c0-8.52-3.52-12.78-10.56-12.78s-10.56,4.26-10.56,12.78v70.94c0,8.4,3.52,12.59,10.56,12.59s10.56-4.2,10.56-12.59v-25.38h-10.19v-18.52h29.45v42.42c0,10.5-2.59,18.55-7.78,24.17-5.19,5.62-12.72,8.43-22.6,8.43s-17.41-2.81-22.6-8.43Z"/>
-          </svg>
+          <CreaderoLogo height={28} />
           <button onClick={() => setMenuOpen(false)} style={{
             background: 'none', border: 'none', color: 'var(--text2)',
             fontSize: '22px', cursor: 'pointer'
@@ -182,7 +184,6 @@ export default function NavBar({ currentView, setView }) {
         zIndex: 300, transition: 'right .25s ease',
         display: 'flex', flexDirection: 'column',
       }}>
-        {/* Header */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '16px 20px', borderBottom: '1px solid var(--border)'
@@ -194,9 +195,7 @@ export default function NavBar({ currentView, setView }) {
           }}>×</button>
         </div>
 
-        {/* Contenido perfil */}
         <div style={{ flex: 1, padding: '28px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          {/* Avatar grande */}
           <div style={{
             width: '80px', height: '80px', borderRadius: '50%',
             background: profile?.avatar_url ? 'transparent' : 'var(--accent-bg)',
@@ -209,30 +208,20 @@ export default function NavBar({ currentView, setView }) {
               : <span style={{ fontSize: '28px', fontWeight: 700, color: 'var(--accent)' }}>{initials}</span>
             }
           </div>
-
-          {/* Nombre */}
           <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px', textAlign: 'center' }}>
             {profile?.username || user?.email?.split('@')[0]}
           </div>
           <div style={{ fontSize: '12px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace', marginBottom: '20px', textAlign: 'center' }}>
             {user?.email}
           </div>
-
-          {/* Botón editar perfil */}
-          <button
-            onClick={() => { setShowEditProfile(true); setProfileOpen(false) }}
-            className="btn btn-ghost btn-full"
-            style={{ marginBottom: '12px' }}
-          >
+          <button onClick={() => { setShowEditProfile(true); setProfileOpen(false) }}
+            className="btn btn-ghost btn-full" style={{ marginBottom: '12px' }}>
             Editar perfil
           </button>
         </div>
 
-        {/* Botón salir abajo */}
         <div style={{ padding: '20px', borderTop: '1px solid var(--border)' }}>
-          <button onClick={signOut} className="btn btn-danger btn-full">
-            Cerrar sesión
-          </button>
+          <button onClick={signOut} className="btn btn-danger btn-full">Cerrar sesión</button>
         </div>
       </div>
       {profileOpen && <div onClick={() => setProfileOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 299, background: 'rgba(0,0,0,0.5)' }} />}

@@ -1,7 +1,7 @@
 {
-  "short_name": "Content App",
-  "name": "Content App — YG",
-  "description": "Gestión de proyectos de contenido",
+  "short_name": "Creadero",
+  "name": "Creadero — Gestión de contenido",
+  "description": "Planifica, escribe y publica tu contenido digital",
   "icons": [
     {
       "src": "logo192.png",
