@@ -81,7 +81,7 @@ export default function NavBar({ currentView, setView }) {
           </button>
 
           {/* Logo Creadero */}
-          <CreaderoLogo height={36} />
+          <CreaderoLogo height={48} />
 
           {/* Avatar */}
           <button onClick={() => setProfileOpen(!profileOpen)} style={{
