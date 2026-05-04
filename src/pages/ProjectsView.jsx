@@ -55,14 +55,16 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
   async function handleSave(form) {
     const payload = {
       title: form.title,
-      description: form.description || null,
-      workstream_id: form.workstream_id || null,
-      started: form.started || null,
-      due: form.due || null,
-      completed: form.completed || null,
-      status: form.status || 'No empezado',
-      script: form.script || null,
-      user_id: user.id,
+	  description: form.description || null,
+	  workstream_id: form.workstream_id || null,
+	  started: form.started || null,
+	  due: form.due || null,
+	  completed: form.completed || null,
+	  status: form.status || 'No empezado',
+	  script: form.script || null,
+	  video_type: form.video_type || 'Orgánico',
+	  monto: form.monto || null,
+	  user_id: user.id,
     }
     if (form.id) {
       const { error } = await supabase.from('projects').update(payload).eq('id', form.id)
@@ -131,17 +133,28 @@ export default function ProjectsView({ projects, workstreams, onRefresh, toast }
                   </span>
                 </div>
 
-                <div style={{ display: 'flex', gap: '12px', marginTop: '10px', flexWrap: 'wrap' }}>
-                  {ws && <span style={{ fontSize: '11px', color: 'var(--accent)', fontFamily: 'DM Mono, monospace' }}>{ws.name}</span>}
-                  <span style={{ fontSize: '11px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace' }}>
-                    Vence {fmtDate(p.due)}
-                  </span>
-                  {p.completed && (
-                    <span style={{ fontSize: '11px', color: 'var(--green)', fontFamily: 'DM Mono, monospace' }}>
-                      ✓ {fmtDate(p.completed)}
-                    </span>
-                  )}
-                </div>
+                {/* Meta */}
+				<div style={{ display: 'flex', gap: '12px', marginTop: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+				  {ws && <span style={{ fontSize: '11px', color: 'var(--accent)', fontFamily: 'DM Mono, monospace' }}>{ws.name}</span>}
+				  {p.video_type && p.video_type !== 'Orgánico' && (
+					<span style={{
+					  fontSize: '10px', fontFamily: 'DM Mono, monospace',
+					  padding: '2px 8px', borderRadius: '6px',
+					  background: p.video_type === 'Campaña pagada' ? 'rgba(62,207,142,0.12)' : 'rgba(78,168,222,0.12)',
+					  color: p.video_type === 'Campaña pagada' ? 'var(--green)' : 'var(--blue)',
+					}}>
+					  {p.video_type === 'Campaña pagada' ? `💰 $${Number(p.monto).toLocaleString('es-MX')}` : '🤝 Colaboración'}
+					</span>
+				  )}
+				  <span style={{ fontSize: '11px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace' }}>
+					Vence {fmtDate(p.due)}
+				  </span>
+				  {p.completed && (
+					<span style={{ fontSize: '11px', color: 'var(--green)', fontFamily: 'DM Mono, monospace' }}>
+					  ✓ {fmtDate(p.completed)}
+					</span>
+				  )}
+				</div>
 
                 {isOpen && (
                   <div style={{ display: 'flex', gap: '8px' }}>

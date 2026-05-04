@@ -10,7 +10,7 @@ export default function ProjectModal({ project, workstreams, onSave, onClose }) 
     if (isEdit) return {
       title: '', description: '', workstream_id: '',
       started: new Date().toISOString().split('T')[0],
-      due: '', status: 'No empezado', completed: '', script: '',
+      due: '', status: 'No empezado', completed: '', script: '', video_type: 'Orgánico', monto: ''
       ...project, completed: project?.completed || '', script: project?.script || ''
     }
     const saved = localStorage.getItem(DRAFT_KEY)
@@ -88,9 +88,9 @@ export default function ProjectModal({ project, workstreams, onSave, onClose }) 
           </div>
 
           <div className="form-row">
-            <div className="form-group">
-              <label className="form-label">Inicio</label>
-              <input className="input" type="date" value={form.started || ''}
+				<div className="form-group">
+				<label className="form-label">Inicio</label>
+				<input className="input" type="date" value={form.started || ''}
                 onChange={e => set('started', e.target.value)} />
             </div>
             <div className="form-group">
@@ -114,6 +114,26 @@ export default function ProjectModal({ project, workstreams, onSave, onClose }) 
                 onChange={e => set('completed', e.target.value)} />
             </div>
           </div>
+
+			<div className="form-group">
+			  <label className="form-label">Tipo de video</label>
+			  <select className="select input" value={form.video_type || 'Orgánico'}
+				onChange={e => set('video_type', e.target.value)}>
+				<option value="Orgánico">Orgánico</option>
+				<option value="Campaña pagada">Campaña pagada</option>
+				<option value="Colaboración">Colaboración</option>
+			  </select>
+			</div>
+
+			{form.video_type === 'Campaña pagada' && (
+			  <div className="form-group">
+				<label className="form-label">Monto cobrado ($)</label>
+				<input className="input" type="number" min="0" step="0.01"
+				  value={form.monto || ''}
+				  onChange={e => set('monto', e.target.value)}
+				  placeholder="Ej: 5000" />
+			  </div>
+			)}
 
           <div className="form-group">
             <label className="form-label">Guion del video</label>
