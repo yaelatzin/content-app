@@ -35,7 +35,7 @@ export default function ShareView() {
 
   publicSupabase
     .from('projects')
-    .select('id, title, description, status, started, due, script')
+    .select('id, title, description, status, started, due, script, video_url')
     .eq('id', id)
     .maybeSingle()
     .then(({ data, error }) => {
@@ -95,6 +95,21 @@ export default function ShareView() {
             <p style={{ fontSize: '14px', color: 'var(--text)', lineHeight: 1.7, whiteSpace: 'pre-wrap', margin: 0 }}>{project.script}</p>
           </div>
         )}
+		
+		{project.video_url && (
+		  <div style={{ borderTop: '1px solid var(--border)', marginTop: '14px', paddingTop: '14px' }}>
+			<p style={{ fontSize: '11px', color: 'var(--text3)', marginBottom: '10px', fontFamily: 'DM Mono, monospace' }}>VIDEO</p>
+			<video
+			  src={project.video_url}
+			  controls
+			  style={{
+				width: '100%', borderRadius: '10px',
+				background: 'var(--surface)', maxHeight: '300px'
+			  }}
+			/>
+		  </div>
+		)}
+		
       </div>
 
       <p style={{ fontSize: '11px', color: 'var(--text3)', textAlign: 'center', marginTop: '16px', fontFamily: 'DM Mono, monospace' }}>
