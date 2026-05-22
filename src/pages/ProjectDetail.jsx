@@ -148,40 +148,53 @@ export default function ProjectDetail({ project, workstreams, onClose, onEdit, o
 
           {videoUrl ? (
             <div>
-  
-    href={videoUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-    style={{
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      gap: '10px', padding: '20px', marginBottom: '8px',
-      background: 'var(--accent-bg)',
-      border: '1px solid var(--accent-border)',
-      borderRadius: '12px', textDecoration: 'none',
-      color: 'var(--accent)', fontSize: '14px',
-      fontFamily: 'Montserrat, sans-serif', fontWeight: 600,
-    }}
-  >
-    📹 Ver video
-  </a>
-  
-    href={videoUrl}
-    download
-    style={{
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      gap: '10px', padding: '12px', marginBottom: '8px',
-      border: '1px solid var(--border2)',
-      borderRadius: '12px', textDecoration: 'none',
-      color: 'var(--text2)', fontSize: '13px',
-      fontFamily: 'Montserrat, sans-serif',
-    }}
-  >
-    ↓ Descargar video
-  </a>
-  <button onClick={handleDeleteVideo} className="btn btn-danger btn-sm" style={{ width: '100%' }}>
-    Eliminar video
-  </button>
-</div>
+              <video
+                src={videoUrl}
+                controls
+                playsInline
+                preload="metadata"
+                style={{
+                  width: '100%', borderRadius: '12px',
+                  background: 'var(--surface)', marginBottom: '10px',
+                  maxHeight: '300px'
+                }}
+              />
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                <a
+                  href={videoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    flex: 1, display: 'block', textAlign: 'center',
+                    padding: '8px', borderRadius: '8px',
+                    border: '1px solid var(--border2)',
+                    fontSize: '12px', color: 'var(--accent)',
+                    fontFamily: 'Montserrat, sans-serif', fontWeight: 600,
+                    textDecoration: 'none'
+                  }}
+                >
+                  Ver en pantalla completa →
+                </a>
+                <a
+                  href={videoUrl}
+                  download
+                  style={{
+                    flex: 1, display: 'block', textAlign: 'center',
+                    padding: '8px', borderRadius: '8px',
+                    background: 'var(--accent-bg)',
+                    border: '1px solid var(--accent-border)',
+                    fontSize: '12px', color: 'var(--accent)',
+                    fontFamily: 'Montserrat, sans-serif', fontWeight: 600,
+                    textDecoration: 'none'
+                  }}
+                >
+                  Descargar ↓
+                </a>
+              </div>
+              <button onClick={handleDeleteVideo} className="btn btn-danger btn-sm" style={{ width: '100%' }}>
+                Eliminar video
+              </button>
+            </div>
           ) : (
             <label style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
