@@ -102,6 +102,8 @@ export default function ShareView() {
 			<video
 			  src={project.video_url}
 			  controls
+			  playsInline
+			  preload="metadata"
 			  style={{
 				width: '100%', borderRadius: '10px',
 				background: 'var(--surface)', maxHeight: '300px'

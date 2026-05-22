@@ -155,14 +155,16 @@ export default function ProjectDetail({ project, workstreams, onClose, onEdit, o
           {videoUrl ? (
             <div>
               <video
-                src={videoUrl}
-                controls
-                style={{
-                  width: '100%', borderRadius: '12px',
-                  background: 'var(--surface)', marginBottom: '10px',
-                  maxHeight: '300px'
-                }}
-              />
+			  src={videoUrl}
+			  controls
+			  playsInline
+			  preload="metadata"
+			  style={{
+				width: '100%', borderRadius: '12px',
+				background: 'var(--surface)', marginBottom: '10px',
+				maxHeight: '300px'
+			  }}
+			/>
               <button onClick={handleDeleteVideo} className="btn btn-danger btn-sm" style={{ width: '100%' }}>
                 Eliminar video
               </button>
