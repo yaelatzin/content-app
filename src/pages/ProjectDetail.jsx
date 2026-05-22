@@ -72,7 +72,6 @@ export default function ProjectDetail({ project, workstreams, onClose, onEdit, o
       animation: 'slideUp .2s ease'
     }}>
 
-      {/* Header */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 10,
         background: 'var(--bg)', borderBottom: '1px solid var(--border)',
@@ -89,14 +88,12 @@ export default function ProjectDetail({ project, workstreams, onClose, onEdit, o
         </span>
       </div>
 
-      {/* Content */}
       <div style={{ padding: '24px 20px', maxWidth: '480px', margin: '0 auto', width: '100%', flex: 1 }}>
 
         <h1 className="anton" style={{ fontSize: '26px', lineHeight: 1.2, marginBottom: '12px' }}>
           {project.title}
         </h1>
 
-        {/* Meta */}
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '24px', alignItems: 'center' }}>
           {ws && <span style={{ fontSize: '11px', color: 'var(--accent)', fontFamily: 'DM Mono, monospace' }}>{ws.name}</span>}
           {project.video_type && project.video_type !== 'Orgánico' && (
@@ -120,7 +117,6 @@ export default function ProjectDetail({ project, workstreams, onClose, onEdit, o
           )}
         </div>
 
-        {/* Descripción */}
         {project.description && (
           <div style={{ marginBottom: '28px' }}>
             <div style={{ fontSize: '11px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>
@@ -130,7 +126,6 @@ export default function ProjectDetail({ project, workstreams, onClose, onEdit, o
           </div>
         )}
 
-        {/* Guion */}
         {project.script && (
           <div style={{ marginBottom: '28px' }}>
             <div style={{ fontSize: '11px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>
@@ -146,7 +141,6 @@ export default function ProjectDetail({ project, workstreams, onClose, onEdit, o
           </div>
         )}
 
-        {/* Video */}
         <div style={{ marginBottom: '28px' }}>
           <div style={{ fontSize: '11px', color: 'var(--text3)', fontFamily: 'DM Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>
             Video final
@@ -154,21 +148,40 @@ export default function ProjectDetail({ project, workstreams, onClose, onEdit, o
 
           {videoUrl ? (
             <div>
-              <video
-			  src={videoUrl}
-			  controls
-			  playsInline
-			  preload="metadata"
-			  style={{
-				width: '100%', borderRadius: '12px',
-				background: 'var(--surface)', marginBottom: '10px',
-				maxHeight: '300px'
-			  }}
-			/>
-              <button onClick={handleDeleteVideo} className="btn btn-danger btn-sm" style={{ width: '100%' }}>
-                Eliminar video
-              </button>
-            </div>
+  
+    href={videoUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      gap: '10px', padding: '20px', marginBottom: '8px',
+      background: 'var(--accent-bg)',
+      border: '1px solid var(--accent-border)',
+      borderRadius: '12px', textDecoration: 'none',
+      color: 'var(--accent)', fontSize: '14px',
+      fontFamily: 'Montserrat, sans-serif', fontWeight: 600,
+    }}
+  >
+    📹 Ver video
+  </a>
+  
+    href={videoUrl}
+    download
+    style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      gap: '10px', padding: '12px', marginBottom: '8px',
+      border: '1px solid var(--border2)',
+      borderRadius: '12px', textDecoration: 'none',
+      color: 'var(--text2)', fontSize: '13px',
+      fontFamily: 'Montserrat, sans-serif',
+    }}
+  >
+    ↓ Descargar video
+  </a>
+  <button onClick={handleDeleteVideo} className="btn btn-danger btn-sm" style={{ width: '100%' }}>
+    Eliminar video
+  </button>
+</div>
           ) : (
             <label style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -196,7 +209,6 @@ export default function ProjectDetail({ project, workstreams, onClose, onEdit, o
         )}
       </div>
 
-      {/* Footer */}
       <div style={{
         position: 'sticky', bottom: 0,
         background: 'var(--bg)', borderTop: '1px solid var(--border)',

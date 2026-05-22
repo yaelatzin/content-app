@@ -99,16 +99,36 @@ export default function ShareView() {
 		{project.video_url && (
 		  <div style={{ borderTop: '1px solid var(--border)', marginTop: '14px', paddingTop: '14px' }}>
 			<p style={{ fontSize: '11px', color: 'var(--text3)', marginBottom: '10px', fontFamily: 'DM Mono, monospace' }}>VIDEO</p>
-			<video
-			  src={project.video_url}
-			  controls
-			  playsInline
-			  preload="metadata"
+			
+			  href={project.video_url}
+			  target="_blank"
+			  rel="noopener noreferrer"
 			  style={{
-				width: '100%', borderRadius: '10px',
-				background: 'var(--surface)', maxHeight: '300px'
+				display: 'flex', alignItems: 'center', justifyContent: 'center',
+				gap: '10px', padding: '20px',
+				background: 'var(--accent-bg)',
+				border: '1px solid var(--accent-border)',
+				borderRadius: '12px', textDecoration: 'none',
+				color: 'var(--accent)', fontSize: '14px',
+				fontFamily: 'Montserrat, sans-serif', fontWeight: 600,
 			  }}
-			/>
+			>
+			  📹 Ver video
+			</a>
+			
+			  href={project.video_url}
+			  download
+			  style={{
+				display: 'flex', alignItems: 'center', justifyContent: 'center',
+				gap: '10px', padding: '12px', marginTop: '8px',
+				border: '1px solid var(--border2)',
+				borderRadius: '12px', textDecoration: 'none',
+				color: 'var(--text2)', fontSize: '13px',
+				fontFamily: 'Montserrat, sans-serif',
+			  }}
+			>
+			  ↓ Descargar video
+			</a>
 		  </div>
 		)}
 		
